@@ -1,0 +1,56 @@
+<!-- Carte contenant les détails par région -->
+<div class="card mt-4">
+  <div class="card-header d-flex justify-content-between">
+    <h4 class="card-title mb-0">DETAILS PAR DIRECTION</h4>
+        <div class="flex-shrink-0 ms-auto">
+                <!-- Boutons pour télécharger le rapport par direction -->
+                <div class="dropdown card-header-dropdown" ngbDropdown>
+                  <a class="text-reset dropdown-btn arrow-none" href="javascript: void(0);"
+                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                     ngbDropdownToggle>
+                    <span class="text-muted"><i class="ri-file-list-3-line align-bottom"></i> Telecharger</span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                    <button type="button" class="btn btn-success btn-sm" (click)="exportToExcelRegion()">
+                      <i class="ri-file-excel-line align-bottom"></i> Télécharger en Excel
+                    </button> <br>
+                 
+                    <button type="button" class="btn btn-danger btn-sm" (click)="exportToPDFRegion()">
+                      <i class="ri-file-pdf-line align-bottom"></i> Télécharger en PDF
+                    </button>
+                  </div>
+                </div>
+         </div>    
+      </div>  
+        
+      <div class="card-body">
+        <div *ngIf="selectedRegion">
+          <h3>Détails de la direction: {{ selectedRegion }}</h3>
+          <table *ngIf="regionDetails[selectedRegion]" class="table table-nowrap">
+            <thead class="table-light ">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Localité</th>
+                <th scope="col">Abonnés</th>
+                <th scope="col">Pourcentage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let detail of regionDetails[selectedRegion]; let i = index">
+                <th scope="row">{{ i+1 }}</th>
+                <td>{{ detail[0] }}</td>
+                <td>{{ detail[1] }}</td>
+                <td>{{ calculatePercentage(detail[1]) }}%</td> <!-- Affichage du pourcentage -->
+              </tr>
+            </tbody>
+            <tfoot class="table-light">
+              <tr>
+                <td colspan="2"><strong>Total</strong></td>
+                <td><strong>{{ getTotalAbonnes(selectedRegion) }}</strong></td> <!-- Total des abonnés -->
+                <td><strong>{{ calculatePercentage(getTotalAbonnes(selectedRegion)) }}%</strong></td> <!-- Total des pourcentages -->
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+</div>  

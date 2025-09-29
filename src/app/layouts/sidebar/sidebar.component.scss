@@ -1,0 +1,37 @@
+
+.date-time-box {
+  background-color: #fff;
+  padding: 10px;
+  margin-top: 160px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.date-time-box p {
+  font-size: 12px;
+  color: #157b53 ;
+  text-align: center;
+  margin-bottom: 3px;
+}
+
+/* .nav-link {
+  margin-left: 33px;
+} */
+
+.suivi-item {
+  margin-left: 33px;
+}
+
+.menu-link {
+  text-decoration: none;
+}
+
+.menu-link i {
+  font-size: 22px;
+  margin-right: 10px;
+}
+
+.menu-link .has-arrow::before {
+  content: none;
+}

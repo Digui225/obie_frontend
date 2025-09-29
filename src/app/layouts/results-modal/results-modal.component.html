@@ -1,0 +1,35 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ title }}</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+</div>
+
+<div class="modal-body">
+  <!-- Tableau -->
+  <div *ngIf="data.length > 0 && headers?.length; else noData">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th *ngFor="let head of headers">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of data">
+          <td *ngFor="let item of row">{{ item }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Graphique -->
+    <div style="height:400px">
+      <canvas baseChart
+              [datasets]="[{ data: chartData, label: title }]"
+              [labels]="chartLabels"
+              [type]="chartType">
+      </canvas>
+    </div>
+  </div>
+
+  <ng-template #noData>
+    <p class="text-muted">Aucune donnée disponible pour cette requête.</p>
+  </ng-template>
+</div>

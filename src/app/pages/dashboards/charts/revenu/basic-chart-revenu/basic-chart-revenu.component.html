@@ -1,0 +1,40 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between">
+    <h4 class="card-title mb-0">REPARTITION MENSUELLE DES MONTANTS FACTURES</h4>
+      <div class="flex-shrink-0 ms-auto">
+        <div class="d-flex flex-wrap gap-2 align-items-center ms-auto">
+          <input type="date" class="form-control form-control-sm" [(ngModel)]="startDate" style="width: 140px;">
+          <input type="date" class="form-control form-control-sm" [(ngModel)]="endDate" style="width: 140px;">
+          <button class="btn btn-outline-success waves-effect waves-light btn-sm " (click)="loadChartData()">Valider</button>
+        <!-- Boutons pour télécharger le rapport -->
+        <div class="dropdown card-header-dropdown" ngbDropdown #dropdownMenu="ngbDropdown">
+          <a class="text-reset dropdown-btn arrow-none" href="javascript: void(0);"
+             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+             ngbDropdownToggle>
+            <span class="text-muted"><i class="ri-file-list-3-line align-bottom"></i> Telecharger</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+            <button type="button" class="btn btn-success btn-sm" (click)="exportToExcel()">
+              <i class="ri-file-excel-line align-bottom"></i>Telecharger en Excel
+            </button>  <br><br>
+         
+            <button type="button" class="btn btn-danger btn-sm" (click)="exportToPDF()">
+              <i class="ri-file-pdf-line align-bottom"></i>Telecharger en PDF
+            </button>  <br><br>
+            <button type="button" class="btn btn-info btn-sm" (click)="downloadChartImageUsingHtml2Canvas()">
+              <i class="ri-hd-fill"></i>Télécharger l'image
+            </button>
+          </div>
+        </div>
+        </div>
+      </div>
+  </div><!-- end card header -->
+
+  <div class="card-body">
+    <apx-chart [series]="basicChart.series" [chart]="basicChart.chart" [dataLabels]="basicChart.dataLabels"
+    [plotOptions]="basicChart.plotOptions" [yaxis]="basicChart.yaxis" [legend]="basicChart.legend"
+    [fill]="basicChart.fill" [stroke]="basicChart.stroke" [tooltip]="basicChart.tooltip"
+    [xaxis]="basicChart.xaxis" [colors]="basicChart.colors" dir="ltr" id="chart1"></apx-chart>
+  </div><!-- end card-body -->
+
+</div><!-- end card -->

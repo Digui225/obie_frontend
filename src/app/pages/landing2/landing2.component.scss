@@ -1,0 +1,77 @@
+/* .landing-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px;
+} */
+
+.app-grid {
+  display: flex;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.app-card {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.app-card:hover {
+  transform: scale(1.1);
+}
+
+.app-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  //background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  background-image: linear-gradient(to right, #FF8C00, rgb(255, 255, 192));
+  color: #fff;
+  text-align: center;
+}
+
+.logo-grid {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.logo-card {
+  background: rgba(255,255,255,0.1);
+  border-radius: 1rem;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
+  text-align: center;
+}
+
+.logo-card:hover {
+  transform: scale(1.1);
+  background: rgba(255,255,255,0.2);
+}
+
+.logo-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.logo-card span {
+  display: block;
+  margin-top: 0.5rem;
+  font-weight: bold;
+  color: #fff;
+}

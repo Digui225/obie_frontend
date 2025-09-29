@@ -1,0 +1,97 @@
+<script>
+    $(function() {
+        $("#datepickerFrom").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1990:2034",
+            numberOfMonths: 1,
+            onClose: function(selectedDate) {
+                $("#datepickerTo").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $("#datepickerTo").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1990:2034",
+            numberOfMonths: 1,
+            onClose: function(selectedDate) {
+                $("#datepickerFrom").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+    });
+</script>
+
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Suivi abonné" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+
+            <div class="card-body">
+                <!-- end row -->
+              <app-select-indic-abonne (resultsFetched)="onResultsReceived($event)"></app-select-indic-abonne>
+                <!-- end card-body -->
+             </div><!-- end card -->
+    </div>
+    <!-- end col -->
+  </div> 
+</div> <!--end row-->
+
+    <div class="row">
+      
+    
+      
+          <!-- Composant FaitSuiviAbonne -->
+          <div class="col-xl-6">
+            <app-fait-suivi-abonne 
+              [results]="results" 
+              [resultType]="resultType"
+              [showCard]="showCard">
+            </app-fait-suivi-abonne>
+          </div> 
+      
+          <!-- Composant PiechartAbonne -->
+          <div class="col-xl-6">
+            <app-piechart-abonne
+            [resultType]="resultType"
+            [showCard]="showCard">
+          </app-piechart-abonne>
+          </div>
+    </div>
+<!-- end row -->
+
+<div class="row">
+  <div class="col-xl-12">
+    <app-horizontalbar-abonne></app-horizontalbar-abonne>
+  </div>
+  <!-- end col -->
+  <!-- <div class="col-xl-6" >
+      <app-column100-chart-abonne></app-column100-chart-abonne>
+  </div> -->
+  <!-- end card -->
+</div>
+<!--end row-->
+
+<div class="row">
+        <div class="col-xl-12">
+            <app-basic-chart-abonne></app-basic-chart-abonne>
+        </div>
+</div>
+<!--end row-->
+
+        
+
+
+
+<div class="row">
+  <app-stats-abonne></app-stats-abonne>
+</div>
+
+
+
+
+

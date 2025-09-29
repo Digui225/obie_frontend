@@ -1,0 +1,50 @@
+/* Conteneur global pour la page */
+.auth-page-wrapper {
+    display: flex;
+    height: 100vh; /* Hauteur de l'écran */
+}
+
+/* Partie gauche - Image de fond (55% de la page) */
+.auth-page-left {
+    width: 55%; /* L'image occupe 55% */
+    background-image: url('../../../assets/images/auth-one-bg.jpg'); /* Lien vers votre image */
+    background-size: cover; /* L'image couvre toute la zone */
+    background-position: center; /* Centrer l'image */
+    background-repeat: no-repeat; /* Ne pas répéter l'image */
+}
+
+/* Partie droite - Formulaire (45% de la page) */
+.auth-page-right {
+    width: 45%; /* Le formulaire occupe 45% */
+    background-color: rgba(255, 255, 255, 0.9); /* Fond blanc semi-transparent */
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Ajustements pour la carte du formulaire */
+.card {
+    border-radius: 8px;
+}
+
+/* Ajustement du formulaire */
+.card-body {
+    padding: 2rem;
+}
+
+/* Titre et texte */
+.text-center h5 {
+    margin-bottom: 1rem;
+}
+
+/* Style du bouton */
+.btn-success {
+    background-color: #28a745;
+    border: none;
+}
+
+/* Logo et footer */
+.auth-logo img {
+    height: 100px;
+}

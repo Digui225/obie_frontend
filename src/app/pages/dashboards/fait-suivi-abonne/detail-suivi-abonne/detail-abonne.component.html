@@ -1,0 +1,54 @@
+<!-- Tableau des détails -->
+<div *ngIf="details && details.length > 0; else noData">
+
+    <!-- liste par direction -->
+    <table class="table table-nowrap">
+      <thead class="table-light">
+        <tr>
+          <th scope="col" class="center-text">Code Abonné</th>
+          <th scope="col" class="center-text">Nom et Prénom</th>
+          <th scope="col" class="center-text">Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let detail of details | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }" 
+        (click)="openCarte(detail)">
+          <td class="center-text">{{ detail[0] }}</td>
+          <td class="center-text">{{ detail[1] }}</td>
+          <td class="center-text">{{ detail[2] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button type="button" style="display: none;" (click)="notifyParentForExport()"></button>
+
+    <!-- ✅ Contrôles de pagination -->
+    <pagination-controls
+      (pageChange)="onPageChange($event)"
+      previousLabel="←"
+      nextLabel="→"
+      [maxSize]="5"
+      [responsive]="true"
+      [directionLinks]="true"
+      [autoHide]="false"
+      class="my-pagination">
+    </pagination-controls>
+
+
+  
+    
+</div>
+
+<!-- Modal hors du *ngIf -->
+<div class="modal fade" id="carteModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-3">
+      <app-carte-abonne [abonne]="selectedAbonne"></app-carte-abonne>
+    </div>
+  </div>
+</div>
+  
+  <ng-template #noData>
+    <p>Aucun détail disponible pour cette ligne.</p>
+  </ng-template>
+  

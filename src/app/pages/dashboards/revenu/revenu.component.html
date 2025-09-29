@@ -1,0 +1,104 @@
+<script>
+    $(function() {
+        $("#datepickerFrom").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1990:2034",
+            numberOfMonths: 1,
+            onClose: function(selectedDate) {
+                $("#datepickerTo").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $("#datepickerTo").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1990:2034",
+            numberOfMonths: 1,
+            onClose: function(selectedDate) {
+                $("#datepickerFrom").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+    });
+</script>
+
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Suivi Revenu" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+        <div class="col-lg-12">
+                    <div class="card">
+                                    <div class="card-body">
+
+    <app-select-indic-revenu
+        (resultsFetched)="onResultsReceived($event)">
+        >  
+        </app-select-indic-revenu>
+    </div>
+        </div>
+    </div>
+</div>
+
+ <!--end row-->
+
+    <div class="row">
+      
+    
+      
+          <!-- Composant FaitSuiviAbonne -->
+          <div class="col-xl-6">
+            <app-fait-suivi-revenu 
+              [results]="results" 
+              [resultType]="resultType"
+              [showCard]="showCard">
+            </app-fait-suivi-revenu>
+          </div> 
+      
+          <!-- Composant PiechartAbonne -->
+          <div class="col-xl-6">
+            <app-piechart-stack-revenu
+            [resultType]="resultType"
+            [showCard]="showCard">
+          </app-piechart-stack-revenu>
+          </div>
+    </div>
+<!-- end row -->
+
+    <div class="row">
+            <div class="col-xl-12">
+                <app-basic-chart-revenu></app-basic-chart-revenu>
+            </div>
+
+           <!--  <div class="col-xl-6">
+                <app-basic-bar-revenu></app-basic-bar-revenu>   
+            </div> -->
+            <!-- end col -->
+
+    </div>
+<!--end row-->
+
+    <!-- <div class="row">
+        <app-piechart-revenu></app-piechart-revenu>
+    </div> -->
+    <!-- end ROW -->
+    <!-- <div class="row">
+        <div class="col-xl-6">
+    <app-multiple-radialbar-revenu></app-multiple-radialbar-revenu>
+        </div>
+    </div> -->
+    <!-- end card -->
+
+<!-- <div class="row">
+    <div class="col-xl-12">
+        <app-horizontalbar-revenu/>
+    </div>
+     <div class="col-xl-6">
+        <app-column100-chart-revenu/>
+    </div> 
+</div> -->
+<!--end row-->
+<div class="row">
+    <app-stats-revenu></app-stats-revenu>
+</div> <!-- end row-->

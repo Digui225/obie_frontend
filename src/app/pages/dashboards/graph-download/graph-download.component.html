@@ -1,0 +1,55 @@
+<div class="col-lg-6">
+    <div class="mt-4">
+      <div class="card card-height-100">
+        <div class="card-header align-items-center d-flex">
+          <label for="pie-chart" class="form-label text-muted">
+            <h4 class="card-title mb-0 flex-grow-1"><b>Répartition des abonnés par direction</b></h4>
+          </label>
+        </div>
+  
+        <!-- Pie Chart -->
+        <canvas #pieChart></canvas>
+  
+        <!-- Pop-up modal for Abidjan details -->
+        <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+          <div class="modal-dialog" (click)="$event.stopPropagation()"> <!-- Prevent click propagation to overlay -->
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Détails des abonnés à Abidjan</h5>
+                <button type="button" class="btn-close" (click)="closeModal()"></button>
+              </div>
+              <div class="modal-body">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Localité</th>
+                      <th scope="col">Pourcentage</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Yopougon</td>
+                      <td>50%</td>
+                    </tr>
+                    <tr>
+                      <td>Cocody</td>
+                      <td>25%</td>
+                    </tr>
+                    <tr>
+                      <td>Adjame</td>
+                      <td>30%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="downloadChartImage()">Télécharger l'image du graphique</button>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  

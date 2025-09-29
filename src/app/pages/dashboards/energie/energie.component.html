@@ -1,0 +1,118 @@
+<script>
+    $(function() {
+        $("#datepickerFrom").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1990:2034",
+            numberOfMonths: 1,
+            onClose: function(selectedDate) {
+                $("#datepickerTo").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $("#datepickerTo").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1990:2034",
+            numberOfMonths: 1,
+            onClose: function(selectedDate) {
+                $("#datepickerFrom").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+    });
+</script>
+
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Suivi Energie" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+<div class="row">
+        <div class="col-lg-12">
+                    <div class="card">
+                                    <div class="card-body">
+
+    <app-select-indic-energie
+        (resultsFetched)="onResultsReceived($event)">
+        >  
+        </app-select-indic-energie>
+    </div>
+        </div>
+    </div>
+</div>
+<!--end row-->
+
+    <!-- <div class="row">
+        <div class="col-lg-12">
+                    <div class="card">
+                                    <div class="card-body"> -->
+
+                                        <!-- Nouveau drag & drop pour test -->
+<!-- <app-drag-drop-energie
+    (resultsFetched)="onResultsReceived($event)">
+</app-drag-drop-energie>
+    </div>
+        </div>
+    </div>
+</div> -->
+<!--end row-->
+
+    <div class="row">
+          
+        
+          
+      <!-- Composant FaitSuiviEnergie -->
+      <div class="col-xl-6">
+        <app-fait-suivi-energie
+        [results]="results"
+        [resultType]="resultType"
+        [showCard]="showCard">
+        </app-fait-suivi-energie>
+      </div>
+
+      <!-- Composant PiechartEnergie -->
+      <div class="col-xl-6">
+        <app-piechart-energie
+        [resultType]="resultType"
+        [showCard]="showCard">
+        </app-piechart-energie>
+      </div>
+    </div>
+
+<div class="row">
+        <!--  <div class="col-xl-12">
+            <app-basic-chart-energie></app-basic-chart-energie>
+        </div>  -->
+         <div class="col-xl-12">
+          <app-combochart-energie></app-combochart-energie>
+        </div>
+
+        <!-- <div class="col-xl-6">
+                  
+            <app-multiple-radialbar-energie></app-multiple-radialbar-energie>
+        </div> -->
+        <!-- end col -->
+
+</div>
+<!--end row-->
+
+<!-- <div class="row">
+    <app-piechart-energie></app-piechart-energie>
+</div> -->
+<div class="row">
+        <app-basic-bar-energie></app-basic-bar-energie>    
+    <!-- end card -->
+</div>
+<!-- <div class="row">
+    <div class="col-xl-12">
+        <app-horizontalbar-energie/>
+    </div>
+     end col 
+     <div class="col-xl-6">
+        <app-column100-chart-energie></app-column100-chart-energie>
+    </div> 
+     end card 
+</div> -->
+<!--end row-->
+<div class="row">
+    <app-stats-energie></app-stats-energie>
+</div> <!-- end row-->

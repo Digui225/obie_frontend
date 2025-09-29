@@ -1,0 +1,42 @@
+<div class="modal-header">
+  <h5 class="modal-title fw-bold">📅 Choisir une période</h5>
+  <button 
+    type="button" 
+    class="btn-close" 
+    aria-label="Fermer" 
+    (click)="dismiss()">
+  </button>
+</div>
+
+<div class="modal-body">
+  <form>
+    <div class="mb-3">
+      <label for="startDate" class="form-label">Date de début</label>
+      <input 
+        id="startDate" 
+        type="date" 
+        class="form-control" 
+        [(ngModel)]="start" 
+        name="startDate">
+    </div>
+
+    <div class="mb-3">
+      <label for="endDate" class="form-label">Date de fin</label>
+      <input 
+        id="endDate" 
+        type="date" 
+        class="form-control" 
+        [(ngModel)]="end" 
+        name="endDate">
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="dismiss()">
+    Annuler
+  </button>
+  <button type="button" class="btn btn-success" (click)="validate()">
+    Valider
+  </button>
+</div>

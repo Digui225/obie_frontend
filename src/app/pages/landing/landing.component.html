@@ -1,0 +1,23 @@
+<p>landing works!</p>
+
+<div class="landing-container">
+  <h2>Bienvenue 👋</h2>
+  <p>Choisissez votre espace</p>
+
+  <div class="logo-grid">
+    <div class="logo-card" (click)="goTo('/dashboard')">
+        <img src="assets/images/Logo-dark.png" alt="" height="100">
+      <span>OBIE</span>
+    </div>
+
+    <div class="logo-card" (click)="goTo('/autre')">
+      <img src="assets/logo-autre.png" alt="Autre">
+      <span>Autre</span>
+    </div>
+
+    <div class="logo-card" (click)="goTo('/encore')">
+      <img src="assets/logo-encore.png" alt="Encore">
+      <span>Encore</span>
+    </div>
+  </div>
+</div>

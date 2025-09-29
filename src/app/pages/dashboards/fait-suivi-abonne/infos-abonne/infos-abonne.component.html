@@ -1,0 +1,31 @@
+<div class="card-abonne">
+    <!-- En-tête avec icône (sexe) -->
+    <div class="card-header">
+      <img 
+        [src]="abonne?.sexe === 'H' ? 'assets/icons/male.png' : 'assets/icons/female.png'" 
+        alt="Sexe" 
+        class="icon-sexe"
+      />
+      <h3>{{ abonne?.nomPrenom || 'Nom Prénom' }}</h3>
+    </div>
+  
+    <!-- Corps de la carte -->
+    <div class="card-body">
+      <p><strong>Contact:</strong> {{ abonne?.contact || '07070707' }}</p>
+      <p><strong>Adresse:</strong> {{ abonne?.adresse || 'Abidjan, Côte d’Ivoire' }}</p>
+      <p><strong>Num Compteur:</strong> {{ abonne?.numCompteur || 'CPT12345' }}</p>
+      <p><strong>Téléphone:</strong> {{ abonne?.numTelephone || '01010101' }}</p>
+      <p><strong>Puissance:</strong> {{ abonne?.puissance || '6 kVA' }}</p>
+      <p><strong>Statut:</strong> {{ abonne?.statut || 'Actif' }}</p>
+      <p><strong>Segment:</strong> {{ abonne?.segment || 'Résidentiel' }}</p>
+      <p><strong>Code Abonné:</strong> {{ abonne?.codeAbonne || 'AB123456' }}</p>
+    </div>
+  
+    <!-- Actions -->
+    <div class="card-footer">
+      <button (click)="downloadPDF()">📄 Exporter PDF</button>
+      <button (click)="downloadImage()">🖼 Exporter Image</button>
+      <button (click)="downloadExcel()">📊 Exporter Excel</button>
+    </div>
+  </div>
+  

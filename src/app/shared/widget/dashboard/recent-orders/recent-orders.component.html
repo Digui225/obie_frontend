@@ -1,0 +1,38 @@
+<table class="table table-borderless table-centered align-middle table-nowrap mb-0">
+    <thead class="text-muted table-light">
+        <tr>
+            <th scope="col">Direction ID</th>
+            <th scope="col">Direction</th>
+            <th scope="col">Nombre d'abonnés</th>
+            <th scope="col">Revenus Generés</th>
+            <th scope="col">Consommation </th>
+            <th scope="col">Sollicitations </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of RecentSelling">
+            <td>
+                <a href="ecommerce/order-details" class="fw-medium link-primary">{{data.id}}</a>
+            </td>
+            <td>
+                <div class="d-flex align-items-center">
+                   <!--  <div class="flex-shrink-0 me-2">
+                        <img src="{{data.image}}" alt="" class="avatar-xs rounded-circle" />
+                    </div> -->
+                    <div class="flex-grow-1">{{data.customer}}</div>
+                </div>
+            </td>
+            <td>{{data.product}}</td>
+            <td>
+                <span class="text-success">{{data.amount}} Fcfa</span>
+            </td>
+            <td>{{data.vendor}} Kwh</td>
+             <td>
+                <span class="fs-14 fw-medium mb-0" [ngClass]=" { 'badge-soft-warning': data.status === 'Haut', 'badge-soft-danger': data.status === 'Bas'}">{{data.average}}</span>
+            </td>
+            <!--<td>
+                <h5 class="fs-14 fw-medium mb-0">{{data.rating}}<span class="text-muted fs-11 ms-1">({{data.average}} votes)</span></h5>
+            </td> -->
+        </tr><!-- end tr -->
+    </tbody><!-- end tbody -->
+</table><!-- end table -->

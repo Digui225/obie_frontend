@@ -1,0 +1,85 @@
+
+<div *ngIf="showCard">
+
+    <div class="card">
+      <div class="card-header align-results-center d-flex">
+          <h4 class="card-title mb-0 flex-grow-1">RAPPORT DETAILLE</h4>
+          <div class="flex-shrink-0 ms-auto">
+            <!-- Boutons pour télécharger le rapport -->
+            <div class="dropdown card-header-dropdown" ngbDropdown>
+              <a class="text-reset dropdown-btn arrow-none" href="javascript: void(0);"
+                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                 ngbDropdownToggle>
+                <span class="text-muted"><i class="ri-file-list-3-line align-bottom"></i> Telecharger</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                <button type="button" class="btn btn-success btn-sm" (click)="exportToExcel()">
+                  <i class="ri-file-excel-line align-bottom"></i>Telecharger en Excel
+                </button> <br> <br>
+                <button type="button" class="btn btn-danger btn-sm" (click)="exportToPDFRev()">
+                  <i class="ri-file-pdf-line align-bottom"></i>Telecharger en PDF
+                </button> 
+              </div>
+            </div>
+          </div>
+      </div><!-- end card header -->
+    
+      <div *ngIf="loading">Chargement...</div>
+      <div *ngIf="errorMessage">{{ errorMessage }}</div>
+    
+      <div class="card-body">
+        <div *ngIf="results && results.length > 0">
+          <table class="table table-nowrap" *ngIf="tableHeaders && tableHeaders.length > 0">
+            <thead class="table-light" >
+              <tr>
+                <th *ngFor="let header of tableHeaders" scope="col" class="center-text" style="color: #fff; background-color: #157b53;">{{ header }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let result of results | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }; let i = index" 
+                  (click)="onDetailsClick(result)" 
+                  [title]="'Cliquer pour afficher les détails de : ' + result[0]" 
+                  style="cursor: pointer;">
+                <th scope="row" class="center-text">{{ i + 1 }}</th>
+                <td *ngFor="let value of result" class="center-text">{{ value }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+           <!-- ✅ Contrôles de pagination -->
+      <pagination-controls
+      (pageChange)="onPageChange($event)"
+      previousLabel="←"
+      nextLabel="→"
+      [maxSize]="5"
+      [responsive]="true"
+      [directionLinks]="true"
+      [autoHide]="false"
+      class="my-pagination">
+    </pagination-controls>
+        </div>
+      </div>
+    </div> <!-- .card-->
+    
+    <!-- Modal pour afficher les détails -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detailsModalLabel">Détails du revenu : {{ selectedItem }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <app-detail-energie [details]="details">
+          </app-detail-energie>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="ModalToPDF()"> PDF</button>
+          <button type="button" class="btn btn-success" (click)="ModalToExcel()"> Excel</button>
+          <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button> -->
+        </div>
+        
+      </div>
+    </div>
+    </div>
+    </div>

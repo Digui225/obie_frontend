@@ -1,0 +1,114 @@
+
+<div class="row" style="height: 360px;">
+  <!-- Sélection Indicateurs & Axes -->
+  <div class="col-lg-6">
+    <div class="mt-4">
+      <div class="card card-height-100">
+        <div class="card-header align-items-center d-flex">
+          <h4 class="card-title mb-0 flex-grow-1">
+            <b>Indicateurs & Axes d'analyses</b>
+          </h4>
+        </div>
+
+        <div class="card-body">
+          <!-- Indicateurs -->
+          <div class="search-container">
+            <ng-select 
+              class="indicateurs-select custom-select"
+              [items]="filteredIndicateurs"
+              [(ngModel)]="selectedIndicateurs"
+              [multiple]="true" 
+              bindLabel="name" 
+              bindValue="name" 
+              (change)="onSelect($event)" 
+              [groupBy]="'type'"
+              placeholder="Sélectionnez les indicateurs">
+
+              <ng-template ng-option-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+
+              <ng-template ng-group-header-tmp let-group="group">
+                <div class="group-header"><strong>{{ group }}</strong></div>
+              </ng-template>
+            </ng-select>
+
+            <i class="bx bxs-microphone search-icon"
+               (click)="startVoiceRecognition('indicateurs')"></i>
+          </div>
+
+          <!-- Axes -->
+          <div *ngIf="showAxes" class="search-container">
+            <ng-select 
+              class="axes-select custom-select"
+              [items]="filteredAxes" 
+              [multiple]="true" 
+              [(ngModel)]="selectedAxes" 
+              bindLabel="name" 
+              bindValue="name" 
+              (change)="onSelectAxes($event)" 
+              [groupBy]="'type'"
+              placeholder="Sélectionnez les axes">
+
+              <ng-template ng-option-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+
+              <ng-template ng-group-header-tmp let-group="group">
+                <div class="group-header"><strong>{{ group }}</strong></div>
+              </ng-template>
+            </ng-select>
+
+            <i class="bx bxs-microphone search-icon"
+               (click)="startVoiceRecognition('axes')"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sélection Période -->
+  <div class="col-lg-6">
+    <div class="mt-4">
+      <div class="card card-height-100">
+        <div class="card-header align-items-center d-flex">
+          <h4 class="card-title mb-0 flex-grow-1"><b>Période</b></h4>
+        </div>
+
+        <div class="card-body">
+          <form style="width: 80%; margin:auto;">
+            <div>
+              <label for="startDate">Date de début :</label>
+              <input id="startDate"
+                     class="form-control"
+                     placeholder="Sélectionnez la date de début"
+                     [value]="dateRangeService.getStartDate()"
+                     (change)="onStartDateChange($event)"
+                     mwlFlatpickr>
+            </div>
+
+            <br>
+
+            <div>
+              <label for="endDate">Date de fin :</label>
+              <input id="endDate"
+                     class="form-control"
+                     placeholder="Sélectionnez la date de fin"
+                     [value]="dateRangeService.getEndDate()"
+                     (change)="onEndDateChange($event)"
+                     mwlFlatpickr>
+            </div>
+
+            <br>
+
+            <button type="button"
+                    class="btn btn-outline-success w-lg waves-effect waves-light"
+                    (click)="fetchData()">
+              VALIDER
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

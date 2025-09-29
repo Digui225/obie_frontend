@@ -1,0 +1,61 @@
+<div *ngIf="showCard">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <h4 class="card-title mb-0">        
+          {{ cardTitle }}
+        </h4>
+        <div class="flex-shrink-0 ms-auto">
+          <!-- Boutons pour télécharger le rapport -->
+          <div class="dropdown card-header-dropdown" ngbDropdown>
+            <a class="text-reset dropdown-btn arrow-none" href="javascript: void(0);"
+              data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+              ngbDropdownToggle>
+              <span class="text-muted"><i class="ri-file-list-3-line align-bottom"></i> Telecharger</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+              <button type="button" class="btn btn-success btn-sm" (click)="exportToExcel()">
+                <i class="ri-file-excel-line align-bottom"></i> Telecharger en Excel
+              </button> <br><br>
+              <button type="button" class="btn btn-danger btn-sm" (click)="exportToPDFAbs()">
+                <i class="ri-file-pdf-line align-bottom"></i> Telecharger en PDF
+              </button> <br><br>
+              <button type="button" class="btn btn-info btn-sm" (click)="downloadChartImageUsingHtml2Canvas()">
+                <i class="ri-hd-fill"></i>Télécharger l'image
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card-body">
+        <!-- 🔹 Affichage du message d'erreur si aucune donnée n'est disponible -->
+        <div *ngIf="errorMessage" class="alert alert-danger text-center">
+          <i class="ri-error-warning-line"></i> {{ errorMessage }}
+        </div>
+        
+          <div *ngIf="showChart">
+              <div id="chart">
+                <apx-chart 
+                  [series]="simplePieChart.series" 
+                  [chart]="simplePieChart.chart" 
+                  [labels]="simplePieChart.labels" 
+                  [colors]="simplePieChart.colors" 
+                  [legend]="simplePieChart.legend"
+                  [dataLabels]="simplePieChart.dataLabels">
+                </apx-chart>
+              </div>  
+          </div>
+          
+          
+      </div><!-- end card-body -->
+    </div><!-- end card -->  
+  
+
+  <!-- Carte contenant les détails par région -->
+    
+</div>  
+
+
+
+

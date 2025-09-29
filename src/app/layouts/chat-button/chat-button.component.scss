@@ -1,0 +1,125 @@
+.chat-container {
+  position: fixed;
+  bottom: 20px;
+  right: -10px;
+    width: 300px;
+}
+
+.chat-toggle-btn {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); // légère mise en avant
+  }
+}
+
+.chat-box {
+  animation: fadeInUp 0.3s ease;
+  background: #f5f5f5;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+h1 {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.question-list {
+  list-style: none;
+  padding: 0;
+}
+
+.question-btn {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  margin: 5px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &.selected {
+    background-color: #d0e8ff; // Couleur bleue douce
+    border-color: #007bff;
+    font-weight: bold;
+    color: #0056b3;
+  }
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+
+.confirmation-box {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.confirm-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 8px;
+  margin-right: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.date-selection {
+  margin-top: 10px;
+}
+
+.loader {
+  text-align: center;
+  font-weight: bold;
+}
+
+.results-box {
+  margin-top: 10px;
+}
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.result-table th, .result-table td {
+  border: 1px solid #ddd;
+  padding: 5px;
+  text-align: center;
+}
+
+.result-table th {
+  background-color: #f1f1f1;
+}

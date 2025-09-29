@@ -1,0 +1,48 @@
+<div class="chat-container">
+  <!-- Bouton flottant -->
+  <button class="chat-toggle-btn" (click)="toggleChat()">
+    {{ showChat ? '❌ Fermer' : '📩 Ouvrez Moi' }}
+  </button>
+
+  <!-- Chat box -->
+  <div class="chat-box" *ngIf="showChat">
+    <h1>📊 Bonjour, Sélectionnez une tâche :</h1>
+
+    <ul class="question-list">
+      <li *ngFor="let question of questions; let i = index">
+        <button 
+          class="question-btn" 
+          [class.selected]="i === selectedIndex"
+          (click)="handleTask(question, i)">
+          {{ question }}
+        </button>
+      </li>
+    </ul>
+
+    <!-- Dates -->
+    <div class="date-selection">
+      <div>
+        <label for="startDate">Date de début :</label>
+        <input id="startDate" class="form-control" 
+               [value]="dateRangeService.getStartDate()" 
+               (change)="onStartDateChange($event)" 
+               type="date">
+      </div>
+      
+      <div>
+        <label for="endDate">Date de fin :</label>
+        <input id="endDate" class="form-control" 
+               [value]="dateRangeService.getEndDate()" 
+               (change)="onEndDateChange($event)" 
+               type="date">
+      </div>
+    </div>
+
+    <!-- Confirmation -->
+    <div class="confirmation-box" *ngIf="showConfirmation">
+      <p>Confirmez-vous cette action ?</p>
+      <button class="confirm-btn" (click)="confirm(true)">✅ Oui</button>
+      <button class="cancel-btn" (click)="confirm(false)">❌ Non</button>
+    </div>
+  </div>
+</div>

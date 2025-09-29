@@ -1,0 +1,181 @@
+<div *ngIf="showCard">
+  <div class="card">
+    <div class="card-header d-flex justify-content-between">
+      <h4 class="card-title mb-0">        
+        {{ selectedIndicateurs }} PAR {{ selectedAxes }}
+      </h4>
+      <div class="flex-shrink-0 ms-auto">
+        <!-- Boutons pour télécharger le rapport -->
+        <div class="dropdown card-header-dropdown" ngbDropdown>
+          <a class="text-reset dropdown-btn arrow-none" href="javascript: void(0);"
+            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+            ngbDropdownToggle>
+            <span class="text-muted"><i class="ri-file-list-3-line align-bottom"></i> Telecharger</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+            <button type="button" class="btn btn-success btn-sm" (click)="exportToExcel()">
+              <i class="ri-file-excel-line align-bottom"></i> Telecharger en Excel
+            </button> <br><br>
+            <button type="button" class="btn btn-danger btn-sm" (click)="exportToPDFEner()">
+              <i class="ri-file-pdf-line align-bottom"></i> Telecharger en PDF
+            </button> <br><br>
+            <button type="button" class="btn btn-info btn-sm" (click)="downloadChartImageUsingHtml2Canvas()">
+              <i class="ri-hd-fill"></i>Télécharger l'image
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card-body">
+      <!-- 🔹 Affichage du message d'erreur si aucune donnée n'est disponible -->
+      <div *ngIf="errorMessage" class="alert alert-danger text-center">
+        <i class="ri-error-warning-line"></i> {{ errorMessage }}
+      </div>
+      
+        <div *ngIf="showChart">
+          <apx-chart 
+            [series]="simplePieChart.series" 
+            [chart]="simplePieChart.chart" 
+            [labels]="simplePieChart.labels" 
+            [colors]="simplePieChart.colors" 
+            [legend]="simplePieChart.legend"
+            [dataLabels]="simplePieChart.dataLabels">
+          </apx-chart>
+        </div>
+        
+        
+    </div><!-- end card-body -->
+  </div><!-- end card -->  
+
+
+<!-- Carte contenant les détails par région -->
+  
+</div>  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="row">
+
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between">
+          <h4 class="card-title mb-0">REPARTITION DE LA CONSOMMATION PAR DIRECTION</h4>
+          <div class="flex-shrink-0 ms-auto">
+             Boutons pour télécharger le rapport 
+            <div class="dropdown card-header-dropdown" ngbDropdown>
+              <a class="text-reset dropdown-btn arrow-none" href="javascript: void(0);"
+                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                ngbDropdownToggle>
+                <span class="text-muted"><i class="ri-file-list-3-line align-bottom"></i> Telecharger</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                <button type="button" class="btn btn-success btn-sm" (click)="exportToExcel()">
+                  <i class="ri-file-excel-line align-bottom"></i> Telecharger en Excel
+                </button>  <br><br>
+                <button type="button" class="btn btn-danger btn-sm" (click)="exportToPDF()">
+                  <i class="ri-file-pdf-line align-bottom"></i> Telecharger en PDF
+                </button>  <br><br>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+           Graphique en camembert 
+          <apx-chart 
+            [series]="simplePieChart.series" 
+            [chart]="simplePieChart.chart"
+            [labels]="simplePieChart.labels" 
+            [legend]="simplePieChart.legend"
+            [dataLabels]="simplePieChart.dataLabels" 
+            [responsive]="simplePieChart.responsive"
+            [colors]="simplePieChart.colors" 
+            dir="ltr">  Ajout de l'écouteur de clic 
+          </apx-chart>
+      </div> end card-body 
+    </div> end card 
+  </div>
+
+   Carte contenant les détails par région 
+  <div class="col-xl-6"> 
+    <div class="card mt-4" style="height: 400px;">
+      <div class="card-header d-flex justify-content-between">
+        <h4 class="card-title mb-0">DETAILS PAR DIRECTION : {{ selectedRegion }}</h4>
+            <div class="flex-shrink-0 ms-auto">
+                     Boutons pour télécharger le rapport par direction 
+                    <div class="dropdown card-header-dropdown" ngbDropdown>
+                      <a class="text-reset dropdown-btn arrow-none" href="javascript: void(0);"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        ngbDropdownToggle>
+                        <span class="text-muted"><i class="ri-file-list-3-line align-bottom"></i> Telecharger</span>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                        <button type="button" class="btn btn-success btn-sm" (click)="exportToExcelRegion()">
+                          <i class="ri-file-excel-line align-bottom"></i> Télécharger en Excel
+                        </button> <br>
+                        <button type="button" class="btn btn-danger btn-sm" (click)="exportToPDFRegion()">
+                          <i class="ri-file-pdf-line align-bottom"></i> Télécharger en PDF
+                        </button>
+                      </div>
+                    </div>
+            </div>    
+          </div>  
+            
+          <div class="card-body">
+            <div *ngIf="selectedRegion">
+              <table *ngIf="regionDetails[selectedRegion]" class="table table-nowrap">
+                <thead class="table-light ">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Localité</th>
+                    <th scope="col">Abonnés</th>
+                    <th scope="col">Pourcentage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let detail of regionDetails[selectedRegion]; let i = index">
+                    <th scope="row">{{ i+1 }}</th>
+                    <td>{{ detail[0] }}</td>
+                    <td>{{ detail[1] }}</td>
+                    <td>{{ calculatePercentage(detail[1]) }}%</td>  Affichage du pourcentage 
+                  </tr>
+                </tbody>
+                <tfoot class="table-light">
+                  <tr>
+                    <td colspan="2"><strong>Total</strong></td>
+                    <td><strong>{{ getTotalConso(selectedRegion) }}</strong></td>  Total des abonnés 
+                    <td><strong>{{ calculatePercentage(getTotalConso(selectedRegion)) }}%</strong></td>  Total des pourcentages 
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+    </div>  
+  </div> 
+</div> -->

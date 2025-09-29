@@ -1,0 +1,12 @@
+
+<div class="landing-container">
+  <h2>Bienvenue 👋</h2>
+  <p>Choisissez une application :</p>
+
+  <div class="logo-grid">
+    <div *ngFor="let app of apps" class="logo-card" (click)="goTo(app)">
+      <img [src]="app.logo" [alt]="app.name" />
+      <span>{{ app.name }}</span>
+    </div>
+  </div>
+</div>

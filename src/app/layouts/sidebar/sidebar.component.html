@@ -1,0 +1,71 @@
+<!-- ========== App Menu ========== -->
+<div class="app-menu navbar-menu">
+  <!-- LOGO -->
+  <div class="navbar-brand-box">
+      <!-- Dark Logo-->
+      <a routerLink="/" class="logo logo-dark">
+          <span class="logo-sm">
+              <img src="assets/images/Logo-dark.png" alt="" height="50">
+          </span>
+          <span class="logo-lg">
+              <img src="assets/images/Logo-dark.png" alt="" height="77">
+          </span>
+      </a>
+      <!-- Light Logo-->
+      <a routerLink="/" class="logo logo-light">
+          <span class="logo-sm">
+              <img src="assets/images/favicon.png" alt="" height="22">
+          </span>
+          <span class="logo-lg">
+              <img src="assets/images/logo-light.png" alt="" height="17">
+          </span>
+      </a>
+      <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover" (click)="toggleMobileMenu($event)">
+          <i class="ri-record-circle-line"></i>
+      </button>
+  </div>
+
+  <div id="scrollbar">
+    <div class="container-fluid">
+      <div id="two-column-menu"></div>
+      <ngx-simplebar class="sidebar-menu-scroll" style="max-height: calc(100vh - 70px)">
+          <ul class="metismenu list-unstyled navbar-nav" id="navbar-nav">
+              <ng-container *ngFor="let item of menuItems">
+                  <li class="menu-title" *ngIf="item.isTitle">
+                      <span data-key="t-menu">{{ item.label | translate }}</span>
+                  </li>
+  
+                  <li class="nav-item" *ngIf="!item.isTitle && !item.isLayout">
+                      <a *ngIf="hasItems(item)" class="is-parent nav-link menu-link has-dropdown" aria-expanded="true">
+                          <i class="{{ item.icon }} icon nav-icon"></i>
+                          <span>{{ item.label | translate }}</span>
+                          <span class="badge badge-pill {{ item.badge.variant }}" *ngIf="item.badge">{{ item.badge.text | translate }}</span>
+                      </a>
+  
+                      <a [routerLink]="item.link" *ngIf="!hasItems(item)" class="side-nav-link-ref nav-link menu-link" [ngClass]="{'suivi-item': item.className === 'suivi-item'}"(click)="updateActive($event)">
+                        <i class="bx {{ item.icon }} icon nav-icon" *ngIf="item.icon"></i>
+                        <span>{{ item.label | translate }}</span>
+                        <span class="badge badge-pill {{ item.badge.variant }}" *ngIf="item.badge">{{ item.badge.text | translate }}</span>
+                    </a>
+                    
+  
+                  </li>
+              </ng-container>
+          </ul>
+      </ngx-simplebar>
+  </div>
+  
+
+      <div class="sidebar">
+        <div class="date-time-box">
+          <p> {{ date }} </p>
+          <p> {{ time }} </p>
+        </div>
+      </div>
+      <!-- Sidebar -->
+  </div>
+  <div class="sidebar-background"></div>
+</div>
+<!-- Left Sidebar End -->
+<!-- Vertical Overlay-->
+<div class="vertical-overlay" (click)="SidebarHide()"></div>

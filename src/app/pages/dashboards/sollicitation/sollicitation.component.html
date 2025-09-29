@@ -1,0 +1,102 @@
+<script>
+    $(function() {
+        $("#datepickerFrom").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1990:2034",
+            numberOfMonths: 1,
+            onClose: function(selectedDate) {
+                $("#datepickerTo").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $("#datepickerTo").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1990:2034",
+            numberOfMonths: 1,
+            onClose: function(selectedDate) {
+                $("#datepickerFrom").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+    });
+</script>
+                      
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Suivi Sollicitation" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+        <div class="col-lg-12">
+                    <div class="card">
+                                    <div class="card-body">
+
+    <app-select-indic-soll
+        (resultsFetched)="onResultsReceived($event)">
+        >  
+        </app-select-indic-soll>
+    </div>
+        </div>
+    </div>
+</div>
+
+<!--end row-->
+
+  <div class="row">
+      
+    
+      
+          <!-- Composant FaitSuiviSoll -->
+          <div class="col-xl-6">
+            <app-fait-suivi-soll 
+              [results]="results" 
+              [resultType]="resultType"
+              [showCard]="showCard">
+            </app-fait-suivi-soll>
+          </div> 
+      
+          <!-- Composant Piechart-stack-soll -->
+          <div class="col-xl-6">
+            <app-piechart-stack-soll
+            [resultType]="resultType"
+            [showCard]="showCard">
+          </app-piechart-stack-soll>
+          </div>
+    </div>
+
+<div class="row">
+        <div class="col-xl-12">
+            <app-basic-chart-sollicitation></app-basic-chart-sollicitation>
+        </div>
+
+        <!-- end col -->
+
+</div>
+<!--end row-->
+
+ <div class="row">
+    <app-piechart-sollicitation></app-piechart-sollicitation>
+</div>
+    <!-- end col -->
+  <!--  <div class="row">  
+    <div class="col-xl-6">
+        <app-multiple-yaxis-sollicitation/>
+    </div>
+   </div>  -->
+    <!-- end card -->
+
+<!-- <div class="row">
+    <div class="col-xl-6">
+        <app-horizontalbar-sollicitation></app-horizontalbar-sollicitation>
+    </div> -->
+    <!-- end col -->
+    <!-- <div class="col-xl-6">
+        <app-multiple-yaxis-chart></app-multiple-yaxis-chart>
+    </div> -->
+    <!-- end card -->
+<!-- </div> -->
+<!--end row-->
+<div class="row">
+    <app-stats-soll></app-stats-soll>
+</div> <!-- end row-->

@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+body[data-layout-mode="dark"] {
+    background-color: #121212; // fond global
+    color: #f5f5f5;
+  
+    .card-body {
+      background-color: #1e1e2f !important;
+      color: #f5f5f5;
+    }
+  
+    a {
+      color: #a0c4ff;
+    }
+  
+    .text-muted {
+      color: #ccc !important;
+    }
+  
+    // ajouter d'autres overrides globaux pour boutons, textes, headers, etc.
+  }
+  

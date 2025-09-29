@@ -1,0 +1,26 @@
+<div id="layout-wrapper" style="background-color:#f9f4f3;">
+    <!-- Top Bar -->
+    <app-topbar (mobileMenuButtonClicked)="onToggleMobileMenu()"></app-topbar>
+    <!-- Side Bar -->
+    <app-sidebar></app-sidebar>
+    <div class="main-content" >
+        <div class="page-content">
+            <div class="container-fluid">
+                <!-- Main Content -->
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+        <!-- Footer -->
+        <app-footer></app-footer>
+    </div>
+  </div>
+
+  <button (click)="topFunction()" class="btn btn-danger btn-icon" id="back-to-top">
+    <i class="ri-arrow-up-line"></i>
+</button>
+
+  <!--chat button-->
+  <app-chat-button></app-chat-button>
+  <!-- Right Side Bar -->
+<!--   <app-rightsidebar  (settingsButtonClicked)="onSettingsButtonClicked()"></app-rightsidebar>
+ -->  

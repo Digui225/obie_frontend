@@ -1,0 +1,74 @@
+/* CSS Calendrier*/
+.container {
+    display: block;
+    max-width: 800px;
+    margin: 8px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+#period label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+
+}
+#datepickerFrom, #datepickerTo {
+    width: 350px;
+    height: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+#date-range {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+
+}
+/* Fin CSS Calendrier*/
+
+.disabled {
+    pointer-events: none; /* Désactive les clics */
+    color: #ccc; /* Change la couleur pour indiquer qu'il est désactivé */
+}
+
+button {
+    background-color: #157b53;
+    color: #fff;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    width: 100%;
+    max-width: 400px; /* Ajuste selon la taille souhaitée */
+    background: #fff;
+  }
+  
+  .custom-select {
+    flex: 1; /* Permet au ng-select de prendre tout l’espace restant */
+    border: none !important;
+  }
+  
+  .search-icon {
+    font-size: 20px;
+    cursor: pointer;
+    color: #007bff;
+    margin-left: 8px;
+  }
+  
+  .search-icon:hover {
+    color: #0056b3;
+  }
+  
+
+
+
+  

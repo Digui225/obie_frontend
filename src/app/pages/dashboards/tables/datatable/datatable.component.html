@@ -1,0 +1,42 @@
+<div class="container">
+    <!-- Recherche -->
+    <input 
+      type="text" 
+      placeholder="Rechercher..." 
+      [(ngModel)]="searchQuery" 
+      class="search-input" 
+    />
+  
+    <!-- Boutons d'exportation -->
+    <div class="export-buttons">
+      <button (click)="exportToExcel()">Excel</button>
+      <button (click)="exportToCSV()">CSV</button>
+      <button (click)="exportToPDF()">PDF</button>
+    </div>
+  
+    <!-- Tableau avec pagination -->
+    <table>
+      <thead>
+        <tr>
+          <th>Colonne 1</th>
+          <th>Colonne 2</th>
+          <th>Colonne 3</th>
+          <th>Colonne 4</th>
+          <th>Colonne 5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of filteredData | paginate: { itemsPerPage: pageSize, currentPage: currentPage }">
+          <td>{{ row.col1 }}</td>
+          <td>{{ row.col2 }}</td>
+          <td>{{ row.col3 }}</td>
+          <td>{{ row.col4 }}</td>
+          <td>{{ row.col5 }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Pagination -->
+    <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+  </div>
+  

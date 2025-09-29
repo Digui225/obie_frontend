@@ -1,0 +1,185 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="ACCUEIL" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+    <div class="col">
+
+        <div class="h-100">
+            <div class="row mb-3 pb-1">
+                <div class="col-12">
+                    <div class="d-flex align-items-lg-center flex-lg-row flex-column">
+                        <div class="flex-grow-1">
+                            <h4 class="fs-16 mb-1">Bienvenue, {{ username || '...' }}</h4>
+                            <p class="text-muted mb-0">Voici un apercu sur vos statistiques.</p>
+                        </div>
+                        
+                    </div><!-- end card header -->
+                </div>
+                <!--end col-->
+            </div>
+            <!--end row-->
+
+            <div class="row">
+                <div *ngFor="let stat of statData" class="col-xl-3 col-md-6">
+                    <app-stat [title]="stat.title" [value]="stat.value" [icon]="stat.icon"
+                        [persantage]="stat.persantage" [profit]="stat.profit" [link]="stat.link"></app-stat>
+                </div>
+            </div> <!-- end row-->
+
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card" >
+                        <div class="card-header border-0 align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">REVENUS</h4>
+                            <div class="d-flex gap-1">
+                                <button type="button" class="btn btn-soft-secondary btn-sm"
+                                    (click)="setrevenuevalue('all')">
+                                    ALL
+                                </button>
+                                <button type="button" class="btn btn-soft-secondary btn-sm"
+                                    (click)="setrevenuevalue('1M')">
+                                    1M
+                                </button>
+                                <button type="button" class="btn btn-soft-secondary btn-sm"
+                                    (click)="setrevenuevalue('6M')">
+                                    6M
+                                </button>
+                                <button type="button" class="btn btn-soft-primary btn-sm"
+                                    (click)="setrevenuevalue('1Y')">
+                                    1Y
+                                </button>
+                            </div>
+                            <div class="flex-shrink-0 ms-auto">
+                                <!-- Boutons pour télécharger le rapport par direction -->
+                                <div class="dropdown card-header-dropdown" ngbDropdown>
+                                  <a class="text-reset dropdown-btn arrow-none" href="javascript: void(0);"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    ngbDropdownToggle>
+                                    <span class="text-muted"><i class="ri-file-list-3-line align-bottom"></i> Telecharger</span>
+                                  </a>
+                                  <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                                    <button class="btn btn-primary btn-sm" (click)="downloadPDF()">Télécharger en PDF</button> <br> <br>
+                                    <button class="btn btn-warning btn-sm" (click)="downloadExcel()">Télécharger en Excel</button><br> <br>
+                                    <button type="button" class="btn btn-info btn-sm" (click)="downloadChartImage()">
+                                        <i class="ri-hd-fill"></i>Télécharger l'image
+                                    </button>
+                                  </div>
+                                </div>
+                        </div> 
+                        </div><!-- end card header -->
+
+                        <div class="card-header p-0 border-0 bg-soft-light">
+                            <div class="row g-0 text-center">
+                                <div class="col-6 col-sm-3">
+                                    <div class="p-3 border border-dashed border-start-0">
+                                        <h5 class="mb-1"><span [CountTo]="7585" class="counter-value" [from]="0"
+                                                [duration]="1"></span></h5>
+                                        <p class="text-muted mb-0">PRODUCTION</p>
+                                    </div>
+                                </div>
+                                <!--end col-->
+                                <div class="col-6 col-sm-3">
+                                    <div class="p-3 border border-dashed border-start-0">
+                                        <h5 class="mb-1"><span [CountTo]="22.89" class="counter-value" [from]="0"
+                                                [duration]="1"></span>k Fcfa</h5>
+                                        <p class="text-muted mb-0">BENEFICES</p>
+                                    </div>
+                                </div>
+                                <!--end col-->
+                                <div class="col-6 col-sm-3">
+                                    <div class="p-3 border border-dashed border-start-0">
+                                        <h5 class="mb-1"><span [CountTo]="367" class="counter-value" [from]="0"
+                                                [duration]="1"></span></h5>
+                                        <p class="text-muted mb-0">REMBOURSEMENT</p>
+                                    </div>
+                                </div>
+                                <!--end col-->
+                                <div class="col-6 col-sm-3">
+                                    <div class="p-3 border border-dashed border-start-0 border-end-0">
+                                        <h5 class="mb-1 text-success"><span [CountTo]="18.92" class="counter-value"
+                                                [from]="0" [duration]="1"></span>%</h5>
+                                        <p class="text-muted mb-0">TAUX</p>
+                                    </div>
+                                </div>
+                                <!--end col-->
+                            </div>
+                        </div><!-- end card header -->
+
+                        <div class="card-body p-0 pb-2" id="chart_accueil">
+                            <div class="w-100">
+                                <apx-chart dir="ltr" class="apex-charts" [chart]="analyticsChart.chart"
+                                    [series]="analyticsChart.series" [legend]="analyticsChart.legend"
+                                    [stroke]="analyticsChart.stroke" [colors]="analyticsChart.colors"
+                                    [fill]="analyticsChart.fill" [dataLabels]="analyticsChart.dataLabels"
+                                    [xaxis]="analyticsChart.xaxis" [markers]="analyticsChart.markers"
+                                    [plotOptions]="analyticsChart.plotOptions" [yaxis]="analyticsChart.yaxis"
+                                    [tooltip]="analyticsChart.tooltip" [grid]="analyticsChart.grid"
+                                    [labels]="analyticsChart.labels" dir="ltr" >
+                                </apx-chart>
+                            </div>
+                        </div><!-- end card body -->
+                        
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <!-- end col -->
+            </div>
+
+            
+
+             <div class="row">            
+                <app-donut-chart 
+                 [start]="startDate"
+                [end]="endDate">
+            </app-donut-chart>   
+            </div> 
+
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">TABLEAU RECAPITULATIF PAR DIRECTION</h4>
+                            <div class="flex-shrink-0">
+                                <div class="dropdown card-header-dropdown" ngbDropdown>
+                                    <a class="text-reset dropdown-btn arrow-none" href="javascript: void(0);"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                        ngbDropdownToggle>
+                                        <span class="text-muted"><i class="ri-file-list-3-line align-bottom"></i>Telecharger</span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                                        <a class="dropdown-item" href="javascript: void(0);">Telecharger en PDF</a>
+                                        <a class="dropdown-item" href="javascript: void(0);">Telecharger en EXCEL</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div><!-- end card header -->
+
+                        <div class="card-body">
+                            <div class="table-responsive table-card">
+                                  <app-recent-orders [RecentSelling]="RecentSelling"></app-recent-orders> 
+                            </div>
+                        </div>
+                    </div> <!-- .card-->
+                </div> <!-- .col-->
+            </div> <!-- end row-->
+
+
+
+        </div> <!-- end .h-100-->
+
+    </div> <!-- end col -->
+
+   <!--  <div class="col-auto layout-rightside-col">
+        <div class="overlay" (click)="SidebarHide()"></div>
+        <div class="layout-rightside">
+            <div class="card h-100 rounded-0">
+                
+            </div>  end card
+        </div>  end .rightbar
+
+    </div>  --><!-- end col -->
+</div>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
