@@ -50,7 +50,7 @@
                 </tr>
               </thead>
               <tbody>
-                  <tr *ngFor="let abonne of abonnements | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }; let i = index" >
+                  <tr *ngFor="let abonne of abonnements | paginate: { id: 'statsPagination', itemsPerPage: itemsPerPage, currentPage: currentPage }; let i = index" >
                     <td class="center-text">{{ i + 1 }}</td>  
                     <td class="center-text">{{ abonne[0] }}</td>
                     <td class="center-text">{{ abonne[1] }}</td>
@@ -64,6 +64,7 @@
 
             <!-- ✅ Contrôles de pagination -->
           <pagination-controls
+          id="statsPagination"
           (pageChange)="onPageChange($event)"
           previousLabel="←"
           nextLabel="→"

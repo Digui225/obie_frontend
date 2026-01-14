@@ -38,8 +38,8 @@ export class AbonneComponent implements OnInit {
 
 
   // Propriétés explicites pour les dates
-  startDate: string | null = null;
-  endDate: string | null = null;
+  startDate: string | number | null = null;
+  endDate: string | number | null = null;
   loading: boolean = false; // Pour indiquer si les données sont en cours de chargement
   errorMessage: string | null = null; // Pour stocker les messages d'erreur
   noData: boolean = false;  // ➡️ flag spécifique
@@ -95,8 +95,8 @@ export class AbonneComponent implements OnInit {
 
     
     // Initialiser des dates par défaut
-    const defaultStartDate = '2020-01-01'; // Exemple : 1er janvier 2025
-    const defaultEndDate = '2022-12-31'; // Exemple : 31 janvier 2025
+    const defaultStartDate = '20200101'; // Exemple : 1er janvier 2025
+    const defaultEndDate = '20221231'; // Exemple : 31 janvier 2025
     this.dateRangeService.setStartDate(defaultStartDate);
     this.dateRangeService.setEndDate(defaultEndDate);
 

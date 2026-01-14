@@ -286,7 +286,7 @@ export class SelectIndicRevenuComponent {
     const normalizedAxe = axeMapping[normalize(axe)];
 
     this.faitSuiviRevenuService
-      .getRevenuData(normalizedIndicateur, normalizedAxe, startDate, endDate)
+      .getRevenuData(normalizedIndicateur, normalizedAxe, startDate.toString(), endDate.toString())
       .subscribe({
         next: (data: [string, number][]) => {
           if (!data || data.length === 0) {

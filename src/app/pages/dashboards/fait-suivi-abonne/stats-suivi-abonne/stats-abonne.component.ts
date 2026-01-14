@@ -17,15 +17,15 @@ export class StatsAbonneComponent {
   errorMessage = '';
 
   // ✅ Champs liés à l'input date
-  startDate: string = '2020-01-01';
-  endDate: string = '2022-12-30';
+  startDate: string | number = '20200101';
+  endDate: string | number = '20221230';
 
-  constructor(private faitSuiviAbonneService: FaitSuiviAbonneService) {}
+  constructor(private faitSuiviAbonneService: FaitSuiviAbonneService) { }
 
-  
+
   // ➡️ Pour gérer la pagination :
-  currentPage: number = 1; 
-  itemsPerPage: number = 5; 
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
 
   ngOnInit(): void {
     this.fetchAbonneStats(); // initial
@@ -36,13 +36,13 @@ export class StatsAbonneComponent {
     if (this.currentPage === page) {
       return;
     }
-  
+
     this.currentPage = page;
-  
+
     // 👉 Scroller seulement si la page change
     // window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  
+
 
   fetchAbonneStats(): void {
     if (!this.startDate || !this.endDate) {
@@ -53,7 +53,7 @@ export class StatsAbonneComponent {
     this.loading = true;
     this.errorMessage = '';
 
-    this.faitSuiviAbonneService.getAbonneStatsParDirection(this.startDate, this.endDate)
+    this.faitSuiviAbonneService.getAbonneStatsParDirection(this.startDate.toString(), this.endDate.toString())
       .subscribe({
         next: (data) => {
           console.log('Données récupérées :', data);
@@ -74,47 +74,47 @@ export class StatsAbonneComponent {
 
   exportToExcel(): void {
     console.log("[📥] Début exportation Excel...");
-  
+
     if (!this.abonnements || this.abonnements.length === 0) {
       alert("Aucune donnée à exporter !");
       console.warn("[⚠️] Aucune donnée à exporter vers Excel.");
       return;
     }
-  
+
     console.log("[📊] Données à exporter :", this.abonnements);
-  
+
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.abonnements, {
       header: ["Direction", "Total Abonnés", "Abonnés Actifs", "Abonnés Résiliés", "Abonnés Facturés", "Abonnés Forfait"],
     });
     console.log("[📄] Feuille Excel créée.");
-  
+
     const workbook: XLSX.WorkBook = {
       Sheets: { 'Données Abonnés': worksheet },
       SheetNames: ['Données Abonnés']
     };
     console.log("[📚] Classeur Excel prêt.");
-  
+
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     console.log("[📦] Données Excel converties en buffer.");
-  
+
     const data: Blob = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
     });
-  
+
     saveAs(data, 'Statistiques_Abonnés.xlsx');
     console.log("[✅] Fichier Excel téléchargé : Statistiques_Abonnés.xlsx");
   }
-  
+
 
   exportToPDF(): void {
     console.log("[📥] Début exportation PDF...");
-  
+
     if (!this.abonnements || this.abonnements.length === 0) {
       alert("Aucune donnée à exporter !");
       console.warn("[⚠️] Aucune donnée à exporter vers PDF.");
       return;
     }
-  
+
     const doc = new jsPDF();
     const resultType = 'statistiques-abonnes';
     const capitalizedTitle = resultType
@@ -122,20 +122,20 @@ export class StatsAbonneComponent {
       .map(part => part.trim().charAt(0).toUpperCase() + part.trim().slice(1))
       .join(' - ');
     const fileName = resultType.replace(/\s+/g, '_') + '.pdf';
-  
+
     const logoUrl = 'assets/images/gs2e_logo.jpg';
     const reader = new FileReader();
-  
+
     fetch(logoUrl)
       .then(response => response.blob())
       .then(blob => {
         reader.readAsDataURL(blob);
         reader.onload = () => {
           const logoData = reader.result as string;
-  
+
           // Logo
           doc.addImage(logoData, 'PNG', 10, 10, 40, 15);
-  
+
           // Titre centré
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(16);
@@ -143,15 +143,15 @@ export class StatsAbonneComponent {
           const titleWidth = doc.getTextWidth(capitalizedTitle);
           const titleX = (pageWidth - titleWidth) / 2;
           doc.text(capitalizedTitle, titleX, 40);
-  
+
           // Table headers
           const headers = [["Direction", "Total Abonnés", "Actifs", "Résiliés", "Facturés", "Forfait"]];
-  
+
           // Body
           const body = this.abonnements.map((abonne, index) => [
             abonne[0], abonne[1], abonne[2], abonne[3], abonne[4], abonne[5]
           ]);
-  
+
           autoTable(doc, {
             head: headers,
             body: body,
@@ -166,9 +166,9 @@ export class StatsAbonneComponent {
               fontSize: 10,
               cellPadding: 3,
               halign: 'center' // Centrage du contenu des cellules
-            }   
+            }
           });
-  
+
           // Footer date
           const currentDate = new Date();
           const formattedDate = currentDate.toLocaleString('fr-FR', {
@@ -179,11 +179,11 @@ export class StatsAbonneComponent {
             hour: '2-digit',
             minute: '2-digit'
           });
-  
+
           doc.setFontSize(10);
           doc.setFont('helvetica', 'normal');
           doc.text(`Généré le ${formattedDate}`, 10, doc.internal.pageSize.getHeight() - 10);
-  
+
           doc.save(fileName);
           console.log("[✅] Fichier PDF téléchargé :", fileName);
         };
@@ -192,8 +192,8 @@ export class StatsAbonneComponent {
         console.error('Erreur lors du chargement du logo :', error);
       });
   }
-  
-  
+
+
 }
 
 

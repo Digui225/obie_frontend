@@ -1,1 +1,34 @@
-<p>result-modal-soll works!</p>
+<div class="modal-header">
+  <h5 class="modal-title fw-bold">📊 Résultats - {{ resultType }}</h5>
+  <button type="button" class="btn-close" aria-label="Fermer" (click)="close()"></button>
+</div>
+
+<div class="modal-body">
+  <!-- Cas où il n'y a pas de données -->
+  <div *ngIf="!results || results.length === 0; else showResults" class="text-center p-4">
+    <div class="alert alert-warning shadow-sm rounded">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <span class="ms-2">Aucune donnée disponible pour la période sélectionnée.</span>
+    </div>
+  </div>
+
+  <!-- Cas où il y a des résultats -->
+  <ng-template #showResults>
+    <div class="row">
+      <div class="col-xl-6 mb-3">
+        <app-fait-suivi-soll
+          [results]="results"
+          [resultType]="resultType"
+          [showCard]="showCard">
+        </app-fait-suivi-soll>
+      </div>
+
+      <div class="col-xl-6 mb-3">
+        <app-piechart-stack-soll
+          [resultType]="resultType"
+          [showCard]="showCard">
+        </app-piechart-stack-soll>
+      </div>
+    </div>
+  </ng-template>
+</div>

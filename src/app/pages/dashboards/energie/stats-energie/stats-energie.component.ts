@@ -22,8 +22,8 @@ export class StatsEnergieComponent {
 
 
   // ✅ Champs liés à l'input date
-  startDate: string = '2020-01-01';
-  endDate: string = '2022-12-30';
+  startDate: string | number = '20230101';
+  endDate: string | number = '20231230';
 
   constructor(private faitSuiviEnergieService: FaitSuiviEnergieService) {}
 
@@ -48,7 +48,7 @@ export class StatsEnergieComponent {
     this.errorMessage = '';
   
   
-    this.faitSuiviEnergieService.getEnergieStatsParDirection(this.startDate, this.endDate)
+    this.faitSuiviEnergieService.getEnergieStatsParDirection(this.startDate.toString(), this.endDate.toString())
       .subscribe({
         next: (data) => {
           console.log('Données récupérées :', data);

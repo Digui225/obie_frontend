@@ -204,7 +204,7 @@ export class FaitSuiviEnergieService {
         .set('start', start)
         .set('end', end);
   
-        return this.http.get<any[]>(`${baseUrl}/TotalConsoMensuelle`, { params });
+        return this.http.get<any[]>(`${baseUrl}/DetailEnergieMensuelle`, { params });
       }
 
 /* // Méthode pour récupérer le qte total de Kwh    

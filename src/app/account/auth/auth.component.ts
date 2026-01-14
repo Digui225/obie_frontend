@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
-// Login Auth
-import { environment } from '../../../environments/environment';
 import { AuthenticationService } from '../../core/services/auth.service';
-import { AuthfakeauthenticationService } from '../../core/services/authfake.service';
-import { first } from 'rxjs/operators';
+import { AuthfakeauthenticationService } from 'src/app/core/services/authfake.service';
 import { ToastService } from '../login/toast-service';
 
 @Component({
@@ -14,91 +10,95 @@ import { ToastService } from '../login/toast-service';
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
-export class AuthComponent {
-  // Login Form
-  loginForm!: UntypedFormGroup;
+export class AuthComponent implements OnInit {
+
+  loginForm!: FormGroup;
   submitted = false;
-  fieldTextType!: boolean;
+  fieldTextType = false;
   error = '';
-  returnUrl!: string;
-   // Carousel navigation arrow show
-   showNavigationArrows: any;
-
-  toast!: false;
-
-  // set the current year
   year: number = new Date().getFullYear();
+  showNavigationArrows = false;
 
-  constructor(private formBuilder: UntypedFormBuilder,private authenticationService: AuthenticationService,private router: Router,
-    private authFackservice: AuthfakeauthenticationService,private route: ActivatedRoute,public toastService: ToastService) {
-      // redirect to home if already logged in
-      if (this.authenticationService.currentUserValue) {
-        this.router.navigate(['/']);
-      }
-     }
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthenticationService,
+    private authfake: AuthfakeauthenticationService,
+    private router: Router,
+    private route: ActivatedRoute,
+    public toastService: ToastService
+  ) {
+    // Redirection si déjà connecté
+    const user = this.authfake.currentUserValue;
+    if (user) {
+      this.router.navigate(['/dashboard']);
+    }
+  }
 
   ngOnInit(): void {
-    if(localStorage.getItem('currentUser')) {
-      this.router.navigate(['/']);
-    }
-    /**
-     * Form Validation
-     */
-     this.loginForm = this.formBuilder.group({
-      email: ['admin@themesbrand.com', [Validators.required, Validators.email]],
+    // Formulaire de connexion
+    this.loginForm = this.fb.group({
+      email: ['admin@osisgroup.com', [Validators.required, Validators.email]],
       password: ['123456', [Validators.required]],
     });
-    // get return url from route parameters or default to '/'
-    // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
+    // Redirection si déjà logué
+    if (localStorage.getItem('token')) {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
-  // convenience getter for easy access to form fields
-  get f() { return this.loginForm.controls; }
+  // Raccourci pour accéder facilement aux champs
+  get f() {
+    return this.loginForm.controls;
+  }
 
-  /**
-   * Form submit
-   */
-   onSubmit() {
-    this.submitted = true;
+  // Envoi du formulaire
+  onSubmit(): void {
+  this.submitted = true;
 
-    // Login Api
-    this.authenticationService.login(this.f['email'].value, this.f['password'].value).subscribe((data:any) => { 
-      if(data.status == 'success'){
-        localStorage.setItem('toast', 'true');
-        localStorage.setItem('currentUser', JSON.stringify(data.data));
-        localStorage.setItem('token', data.token);
-        this.router.navigate(['/']);
+  if (this.loginForm.invalid) {
+    console.log('🚪 Formulaire invalide → on sort');
+    return;
+  }
+
+  const email = this.f['email'].value;
+  const password = this.f['password'].value;
+  console.log('👉 onSubmit appelé avec :', { email, password });
+
+  this.authfake.login(email, password).subscribe({
+    next: (res: any) => {
+      console.log('🎯 Component reçoit :', res);
+
+      /* 1.  Pas de champ "status" → on considère que si on a un token c’est OK */
+      if (res && res.token) {
+        localStorage.setItem('currentUser', JSON.stringify(res));
+        localStorage.setItem('token', res.token);
+        this.toastService.show('Connexion réussie ✅', {
+          classname: 'bg-success text-white',
+          delay: 4000,
+        });
+        console.log('🧭 Navigate vers /landing2');
+        this.router.navigate(['/landing2']);
       } else {
-        this.toastService.show(data.data, { classname: 'bg-danger text-white', delay: 15000 });
+        console.log('❌ Pas de token dans la réponse → identifiants incorrects');
+        this.toastService.show('Identifiants incorrects', {
+          classname: 'bg-danger text-white',
+          delay: 4000,
+        });
       }
-    });
+    },
+    error: (err) => {
+      console.log('💥 Erreur dans component :', err);
+      this.toastService.show('Erreur de connexion au serveur', {
+        classname: 'bg-danger text-white',
+        delay: 4000,
+      });
+    },
+  });
+}
 
-    // stop here if form is invalid
-    // if (this.loginForm.invalid) {
-    //   return;
-    // } else {
-    //   if (environment.defaultauth === 'firebase') {
-    //     this.authenticationService.login(this.f['email'].value, this.f['password'].value).then((res: any) => {
-    //       this.router.navigate(['/']);
-    //     })
-    //       .catch(error => {
-    //         this.error = error ? error : '';
-    //       });
-    //   } else {
-    //     this.authFackservice.login(this.f['email'].value, this.f['password'].value).pipe(first()).subscribe(data => {
-    //           this.router.navigate(['/']);
-    //         },
-    //         error => {
-    //           this.error = error ? error : '';
-    //         });
-    //   }
-    // }
-  }
-
-  /**
-   * Password Hide/Show
-   */
-   toggleFieldTextType() {
+  // Afficher/masquer le mot de passe
+  toggleFieldTextType(): void {
     this.fieldTextType = !this.fieldTextType;
   }
 }

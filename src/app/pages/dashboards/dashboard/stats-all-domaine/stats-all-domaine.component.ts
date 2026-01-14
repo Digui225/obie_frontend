@@ -28,7 +28,7 @@ export class StatsAllDomaineComponent {
   itemsPerPage: number = 5; 
 
   ngOnInit(): void {
-    this.fetchDomaineStats(); // initial
+    //this.fetchDomaineStats(); // initial
   }
 
   onPageChange(page: number): void {
@@ -72,7 +72,7 @@ export class StatsAllDomaineComponent {
     alert(`Afficher les détails pour : ${abonne.libDirection}`);
   }
 
-  exportToExcel(): void {
+  exportToExcelStats(): void {
     console.log("[📥] Début exportation Excel...");
   
     if (!this.abonnements || this.abonnements.length === 0) {
@@ -89,8 +89,8 @@ export class StatsAllDomaineComponent {
     console.log("[📄] Feuille Excel créée.");
   
     const workbook: XLSX.WorkBook = {
-      Sheets: { 'Données Abonnés': worksheet },
-      SheetNames: ['Données Abonnés']
+      Sheets: { 'Données globales': worksheet },
+      SheetNames: ['Données globales']
     };
     console.log("[📚] Classeur Excel prêt.");
   
@@ -101,12 +101,12 @@ export class StatsAllDomaineComponent {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
     });
   
-    saveAs(data, 'Statistiques_Abonnés.xlsx');
+    saveAs(data, 'Statistiques_Globales_direction.xlsx');
     console.log("[✅] Fichier Excel téléchargé : Statistiques_Abonnés.xlsx");
   }
   
 
-  exportToPDF(): void {
+  exportToPDFStats(): void {
     console.log("[📥] Début exportation PDF...");
   
     if (!this.abonnements || this.abonnements.length === 0) {

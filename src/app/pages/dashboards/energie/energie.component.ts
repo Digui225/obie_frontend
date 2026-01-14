@@ -25,57 +25,55 @@ import { DataSharingService } from 'src/app/core/services/data-sharing.service';
   templateUrl: './energie.component.html',
   styleUrls: ['./energie.component.scss']
 })
-export class EnergieComponent implements OnInit{
+export class EnergieComponent implements OnInit {
   [x: string]: any;
+
   @ViewChild('axesSelect') axesSelect!: NgSelectComponent;
-  
-  
-   // Propriétés explicites pour les dates
-    startDate: string | null = null;
-    endDate: string | null = null;
-  
-      selectedDate!: Date;
-  
-      isSubmitDisabled: boolean = false;  // Désactiver par défaut
-  
-      indicateurs: Group[] = [];
-      axes: Group[] = [];
-  
-    selectedIndicateurs: string[] = []; // Indicateurs sélectionnés
-    selectedAxes: string[] = []; // Axes sélectionnés
-    results: any[][] = []; // Tableau de paires [directionId, nombreAbonnesActifs]
-    resultType: string = ''; // Identifie le type de résultat ('direction' ou 'typeAbonne')
-    tableHeaders: string[] = [];
-  
-    tableConfig: any;
-    showCard : boolean = false;
-  
-  
-  
-    
-    // bread crumb items
-    breadCrumbItems!: Array<{}>;
-  
-    basicRadialbarChart: any;
-    candidatelist!: candidateModel[]
-    
-  
-    // Table data
-    jobList!: Observable<AbonneModel[]>;
-    total: Observable<number>;
-    candidatedetail: any;
-    
-  
-    constructor(public ApiTableConfigService: ApiTableConfigService,
-       public dateRangeService: DateRangeService,
-        public service: AbonneService,
-       public faitSuiviEnergieService: FaitSuiviEnergieService,
-        private dataSharingService: DataSharingService
-  
-        ) {
-      this.jobList = service.countries$;
-      this.total = service.total$;
-    }
+
+
+  // Propriétés explicites pour les dates
+  startDate: string | null = null;
+  endDate: string | null = null;
+
+  selectedDate!: Date;
+
+  isSubmitDisabled: boolean = false;  // Désactiver par défaut
+
+  indicateurs: Group[] = [];
+  axes: Group[] = [];
+
+  selectedIndicateurs: string[] = []; // Indicateurs sélectionnés
+  selectedAxes: string[] = []; // Axes sélectionnés
+  results: any[][] = []; // Tableau de paires [directionId, nombreAbonnesActifs]
+  resultType: string = ''; // Identifie le type de résultat ('direction' ou 'typeAbonne')
+  tableHeaders: string[] = [];
+
+  tableConfig: any;
+  showCard: boolean = false;
+
+
+  // bread crumb items
+  breadCrumbItems!: Array<{}>;
+
+  basicRadialbarChart: any;
+  candidatelist!: candidateModel[]
+
+
+  // Table data
+  jobList!: Observable<AbonneModel[]>;
+  total: Observable<number>;
+  candidatedetail: any;
+
+
+  constructor(public ApiTableConfigService: ApiTableConfigService,
+              public dateRangeService: DateRangeService,
+              public service: AbonneService,
+              public faitSuiviEnergieService: FaitSuiviEnergieService,
+              private dataSharingService: DataSharingService
+  ) {
+    this.jobList = service.countries$;
+    this.total = service.total$;
+  }
 
   ngOnInit(): void {
 
@@ -87,42 +85,42 @@ export class EnergieComponent implements OnInit{
     this.dateRangeService.setEndDate(defaultEndDate);
 
     /**
-       * BreadCrumb
-       */
+     * BreadCrumb
+     */
     this.breadCrumbItems = [
-      { label: 'Domaines d affaires' },
-      { label: 'Suivi Energie', active: true },
+      {label: 'Domaines d affaires'},
+      {label: 'Suivi Energie', active: true},
 
-      ];
+    ];
 
     // Chart Color Data Get Function
     this._basicRadialbarChart('["--vz-success"]');
 
-      /* this.indicateurs = this.Groups.filter(item => item.type === 'Indicateurs');
-      this.axes = this.Groups.filter(item => item.type === 'Axes d analyse');
-      
-      /// Filtrage des groupes
-      this.filteredIndicateurs = this.Groups.filter(group => group.type === 'Indicateurs');
-      this.filteredAxes = this.Groups.filter(group => group.type === 'Axes d analyse');
+    /* this.indicateurs = this.Groups.filter(item => item.type === 'Indicateurs');
+    this.axes = this.Groups.filter(item => item.type === 'Axes d analyse');
 
-      // Sélection automatique d’un indicateur
-      this.selectedIndicateurs = this.filteredIndicateurs.length > 0 ? [this.filteredIndicateurs[0].name] : [];
-      this.dataSharingService.setSelectedIndicateurs(this.selectedIndicateurs);
+    /// Filtrage des groupes
+    this.filteredIndicateurs = this.Groups.filter(group => group.type === 'Indicateurs');
+    this.filteredAxes = this.Groups.filter(group => group.type === 'Axes d analyse');
 
-      // Affichage des axes si au moins un indicateur sélectionné
-      this.showAxes = this.selectedIndicateurs.length > 0;
+    // Sélection automatique d’un indicateur
+    this.selectedIndicateurs = this.filteredIndicateurs.length > 0 ? [this.filteredIndicateurs[0].name] : [];
+    this.dataSharingService.setSelectedIndicateurs(this.selectedIndicateurs);
 
-      // Sélection automatique d’un axe
-      this.selectedAxes = this.filteredAxes.length > 0 ? [this.filteredAxes[0].name] : [];
-      this.dataSharingService.setSelectedAxes(this.selectedAxes); */
+    // Affichage des axes si au moins un indicateur sélectionné
+    this.showAxes = this.selectedIndicateurs.length > 0;
 
-      // Ouvrir axesSelect automatiquement
-      setTimeout(() => {
-        this.axesSelect?.open();
-      }, 0);
+    // Sélection automatique d’un axe
+    this.selectedAxes = this.filteredAxes.length > 0 ? [this.filteredAxes[0].name] : [];
+    this.dataSharingService.setSelectedAxes(this.selectedAxes); */
+
+    // Ouvrir axesSelect automatiquement
+    setTimeout(() => {
+      this.axesSelect?.open();
+    }, 0);
 
 
-    }
+  }
 
   // Chart Colors Set
   public getChartColorsArray(colors: any) {
@@ -134,8 +132,8 @@ export class EnergieComponent implements OnInit{
         if (color) {
           color = color.replace(" ", "");
           return color;
-        }
-        else return newValue;;
+        } else return newValue;
+        ;
       } else {
         var val = value.split(',');
         if (val.length == 2) {
@@ -150,8 +148,8 @@ export class EnergieComponent implements OnInit{
   }
 
   /**
-* TOTAL JOBS Chart
-*/
+   * TOTAL JOBS Chart
+   */
   public _basicRadialbarChart(colors: any) {
     colors = this.getChartColorsArray(colors);
     this.basicRadialbarChart = {
@@ -193,8 +191,15 @@ export class EnergieComponent implements OnInit{
     };
   }
 
-  
-  
+  onResultsReceived(event: { data: any; resultType: string; showCard: boolean }) {
+    console.log("Résultats reçus du composant enfant :", event);
+
+    this.results = event.data;
+    this.resultType = event.resultType;
+    this.showCard = event.showCard;
+  }
+
+}
  
 
   /**
@@ -495,13 +500,7 @@ export class EnergieComponent implements OnInit{
         }
       } */
       
-      onResultsReceived(event: { data: any; resultType: string; showCard: boolean }) {
-  console.log("Résultats reçus du composant enfant :", event);
-
-  this.results = event.data;
-  this.resultType = event.resultType;
-  this.showCard = event.showCard;
-}
+     
 
   
-}
+

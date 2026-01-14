@@ -15,14 +15,15 @@
 
 export const environment = {
   production: true,
-  apiUrl: '/api',  // passera par Nginx qui proxy vers Spring Boot (localhost:8080)
+  apiUrl: '/api',
+  useKeycloak: true,           // ➜  en prod on utilise Keycloak
   keycloakConfig: {
     realm: 'OsisBi',
     clientId: 'obie-angular',
-    url: 'http://192.168.10.81:8080'
+    url: 'http://192.168.10.81:8080' // ✅ espace supprimé
   }
 };
-
+console.log('👉 ENV PRODUCTION chargé :', environment);
 
 /* export const environment = {
   production: true,

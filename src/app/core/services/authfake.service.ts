@@ -1,51 +1,67 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { User } from '../models/auth.models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthfakeauthenticationService {
 
-    private currentUserSubject: BehaviorSubject<User>;
-    public currentUser: Observable<User>;
+  private currentUserSubject: BehaviorSubject<User | null>;
+  public currentUser: Observable<User | null>;
 
-    constructor(private http: HttpClient) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')!));
-        this.currentUser = this.currentUserSubject.asObservable();
-    }
+  constructor(private http: HttpClient) {
+    const storedUser = localStorage.getItem('currentUser');
+    this.currentUserSubject = new BehaviorSubject<User | null>(
+      storedUser ? JSON.parse(storedUser) : null
+    );
+    this.currentUser = this.currentUserSubject.asObservable();
+  }
 
-    /**
-     * current user
-     */
-    public get currentUserValue(): User {
-        return this.currentUserSubject.value;
-    }
+  public get currentUserValue(): User | null {
+    return this.currentUserSubject.value;
+  }
 
-    /**
-     * Performs the auth
-     * @param email email of user
-     * @param password password of user
-     */
-    login(email: string, password: string) {
-        return this.http.post<any>(`/users/authenticate`, { email, password }).pipe(map(user => {
-            // login successful if there's a jwt token in the response
-            if (user && user.token) {                    
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('toast', 'true');
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                this.currentUserSubject.next(user);
-            }
-            return user;
-        }));
-    }
+  login(email: string, password: string): Observable<User> {
+  console.log('🚀 AuthFake va appeler : users/authenticate', { email, password });
 
-    /**
-     * Logout the user
-     */
-    logout() {
-        // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
-        this.currentUserSubject.next(null!);
-    }
+  return this.http.post<User>('users/authenticate', { email, password }).pipe( // ← 2. <User>
+    tap(res => console.log('✅ Réponse brute reçue :', res)),
+    map(user => {
+      if (user && user.token) {
+        localStorage.setItem('toast', 'true');
+        localStorage.setItem('token', user.token);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.currentUserSubject.next(user);
+      }
+      return user;
+    })
+  );
+}
+
+   /** Renvoie le token courant (abstrait le localStorage) */
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  /** 🔐  Persiste un token reçu de l’extérieur (landing, query-param, dev…) */
+  setExternalToken(token: string): void {
+    localStorage.setItem('token', token);
+    // on recrée un pseudo-user pour que currentUserValue ne soit plus null
+    const fakeUser: User = { id: 1, email: 'dev@fake.com', token };
+    localStorage.setItem('currentUser', JSON.stringify(fakeUser));
+    this.currentUserSubject.next(fakeUser);
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  logout(): void {
+    console.trace('🚪 LOGOUT appelé depuis :');
+    localStorage.removeItem('token');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('toast');
+    this.currentUserSubject.next(null);
+  }
 }

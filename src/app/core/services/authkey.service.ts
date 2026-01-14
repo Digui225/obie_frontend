@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, from, map } from 'rxjs';
-import { GlobalComponent } from "../../global-component"; // Importation de GlobalComponent
+import { GlobalComponent } from "../../global-component";
+import { environment } from 'src/environments/environment';
 import { User } from '../models/auth.models';
 import { KeycloakService } from 'keycloak-angular';
 import { LandingService } from './landing.service';
+import { LogoutSignal } from './logoutSignal.service';
 
-const AUTH_API = GlobalComponent.AUTH_API;  // Utilisation de l'URL d'authentification de GlobalComponent
-const JWT_TOKEN_KEY = 'token'; // La clé utilisée pour stocker le token dans localStorage
+const AUTH_API = GlobalComponent.AUTH_API;
+const JWT_TOKEN_KEY = 'token';
+const USER_KEY = 'currentUser';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -16,105 +19,111 @@ const httpOptions = {
 @Injectable({ providedIn: 'root' })
 export class AuthkeyService {
 
-  public currentUserSubject: BehaviorSubject<User | null>;
+  private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
 
-  constructor(private http: HttpClient, private keycloakService: KeycloakService,
-  private landingService: LandingService) {
-    this.currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromLocalStorage());
+  constructor(
+    private http: HttpClient,
+    private keycloakService: KeycloakService,
+    private landingService: LandingService,
+    private logoutSignal: LogoutSignal
+  ) {
+
+    // ❗ Mode Keycloak → user = null au démarrage, pas de localStorage.
+    // ❗ Mode local → on recharge depuis localStorage.
+    const storedUser = !environment.useKeycloak
+      ? this.getUserFromLocalStorage()
+      : null;
+
+    this.currentUserSubject = new BehaviorSubject<User | null>(storedUser);
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  /**
-   * Getter pour accéder à la valeur actuelle de l'utilisateur
-   */
-  public get currentUserValue(): User | null {
-    return this.currentUserSubject.value;
-  }
-
-  /**
-   * Get the current user from localStorage if available
-   */
+  /** ---------------------- MODE LOCAL STORAGE (No Keycloak) ---------------------- */
   private getUserFromLocalStorage(): User | null {
-    const storedUser = localStorage.getItem('currentUser');
+    if (environment.useKeycloak) return null;
+    const storedUser = localStorage.getItem(USER_KEY);
     return storedUser ? JSON.parse(storedUser) : null;
   }
 
-  /**
-   * Register the user (if needed for your backend)
-   * @param email email
-   * @param first_name first name
-   * @param password password
-   */
-  register(email: string, first_name: string, password: string) {
-    return this.http.post(AUTH_API + 'signup', {
-      email,
-      first_name,
-      password
-    }, httpOptions);
+  /** Utilisé seulement en mode SANS Keycloak */
+  loginLocal(email: string, password: string) {
+    return this.http.post<any>(AUTH_API + 'signin', { email, password }, httpOptions)
+      .pipe(
+        map(res => {
+          if (res?.token) {
+            const user: User = {
+              username: res.username,
+              email: res.email,
+              token: res.token
+            };
+
+            localStorage.setItem(USER_KEY, JSON.stringify(user));
+            localStorage.setItem(JWT_TOKEN_KEY, res.token);
+
+            this.currentUserSubject.next(user);
+          }
+          return res;
+        })
+      );
   }
 
-  /**
-   * Login the user with Keycloak
-   * @param email email of the user
-   * @param password password of the user
-   */
-  login(email: string, password: string): Observable<any> {
+  /** ---------------------- MODE KEYCLOAK ---------------------- */
+  login(): Observable<any> {
+    if (!environment.useKeycloak) {
+      throw new Error("❌ login() appelé alors que Keycloak est OFF. Utilise loginLocal().");
+    }
+
     return from(this.keycloakService.login()).pipe(
       map(() => {
-        const keycloakInstance = this.keycloakService.getKeycloakInstance();
-        if (keycloakInstance && keycloakInstance.token) {
+        const kc = this.keycloakService.getKeycloakInstance();
+
+        if (kc?.token) {
           const user: User = {
-            username: keycloakInstance.tokenParsed?.['preferred_username'] || '',
-            email: keycloakInstance.tokenParsed?.['email'] || '',
-            token: keycloakInstance.token
+            username: kc.tokenParsed?.['preferred_username'] || '',
+            email: kc.tokenParsed?.['email'] || '',
+            token: kc.token
           };
-          // Stocker l'utilisateur et le token dans localStorage
-          localStorage.setItem('currentUser', JSON.stringify(user));  // Utilisation de 'currentUser'
-          localStorage.setItem(JWT_TOKEN_KEY, keycloakInstance.token); // Stockage du token dans localStorage
+
+          // 🔥 Mode Keycloak : ON STOCKE PAS LE TOKEN !
           this.currentUserSubject.next(user);
         }
       })
     );
   }
 
-  /**
-   * Logout the user and clear data
-   */
-async logout() {
-  // Nettoyage local
-  localStorage.removeItem('currentUser');
-  localStorage.removeItem(JWT_TOKEN_KEY);
-  this.currentUserSubject.next(null);
+  /** ---------------------- LOGOUT ---------------------- */
+  async logout() {
+    // 🔥 Toujours reset landing
+    localStorage.removeItem('landingSeen');
 
-  // Reset landing → l’utilisateur repassera par landing après reconnexion
-  localStorage.removeItem('landingSeen');
+    if (environment.useKeycloak) {
+      // 🔹 Keycloak gère tout
+      this.currentUserSubject.next(null);
+      await this.keycloakService.logout(window.location.origin);
+      this.logoutSignal.setLoggedOut(); // ← ajoute cette ligne
+      return;
+    }
 
-  // Déconnexion Keycloak
-  await this.keycloakService.logout(window.location.origin);
-}
+    // 🔹 Mode local → nettoyage manuel
+    localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(JWT_TOKEN_KEY);
+    this.currentUserSubject.next(null);
+    this.logoutSignal.setLoggedOut(); // ← ajoute cette ligne
 
+  }
 
-  /**
-   * Reset password (this can be implemented with your backend if needed)
-   * @param email email
-   */
+  /** ---------------------- EXTRA ---------------------- */
   resetPassword(email: string) {
     return this.http.post(AUTH_API + 'reset-password', { email }, httpOptions);
   }
 
-  /**
-   * Get the authenticated user details (from Keycloak)
-   */
   getAuthenticatedUser(): Observable<User | null> {
     return this.currentUserSubject.asObservable();
-  }   
+  }
 
-  /**
-   * Retrieve the JWT token from localStorage
-   */
+  /** Récupération token → utile seulement quand Keycloak = false */
   getJwtToken(): string | null {
-    return localStorage.getItem(JWT_TOKEN_KEY);  // Récupérer le token JWT depuis localStorage
+    return environment.useKeycloak ? null : localStorage.getItem(JWT_TOKEN_KEY);
   }
 }
-

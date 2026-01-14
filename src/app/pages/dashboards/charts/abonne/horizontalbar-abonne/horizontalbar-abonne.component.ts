@@ -22,8 +22,8 @@ export class HorizontalbarAbonneComponent {
   breadCrumbItems!: Array<{}>;
   StackedHorizontalBarChart: any;
   // ✅ Champs liés à l'input date
-  startDate: string = '2020-01-01';
-  endDate: string = '2020-12-30';
+  startDate: string | number = '20200101';
+  endDate: string | number = '20201230';
 
   ngOnInit(): void {
 
@@ -43,7 +43,7 @@ export class HorizontalbarAbonneComponent {
       return;
     }
   
-    this.faitSuiviAbonneService.getMultiAbonneInfos(this.startDate, this.endDate).subscribe({
+    this.faitSuiviAbonneService.getMultiAbonneInfos(this.startDate.toString(), this.endDate.toString()).subscribe({
       next: (data) => {
         this.processChartData(data);
       },

@@ -42,8 +42,8 @@ export class BasicBarEnergieComponent {
 
     // Chart Color Data Get Function
     
-    const start = '2021-01-01';
-    const end = '2021-12-31';
+    const start = '20230101';
+    const end = '20231231';
   
     
     this.faitSuiviEnergieService.getQuantiteKwhConsMois(start, end).subscribe((data: any[]) => {

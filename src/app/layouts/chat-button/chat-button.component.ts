@@ -101,7 +101,7 @@ export class ChatButtonComponent implements OnInit {
 
     const handler = this.taskHandlers[this.currentTask];
     if (handler) {
-      handler(startDate, endDate).subscribe({
+      handler(startDate.toString(), endDate.toString()).subscribe({
         next: (res) => {
           console.log("📥 Données API reçues :", res);
           this.result = res.data;        // uniquement les lignes

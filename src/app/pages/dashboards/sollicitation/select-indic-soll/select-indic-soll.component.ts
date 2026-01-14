@@ -279,7 +279,7 @@ export class SelectIndicSollComponent {
           const normalizedAxe = axeMapping[normalize(axe)];
 
           this.faitSuiviSollService
-            .getSollData(normalizedIndicateur, normalizedAxe, startDate, endDate)
+            .getSollData(normalizedIndicateur, normalizedAxe, startDate.toString(), endDate.toString())
             .subscribe({
               next: (data: [string, number][]) => {
                 if (!data || data.length === 0) {

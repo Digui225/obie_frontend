@@ -50,8 +50,8 @@ export class DashboardComponent implements OnInit {
   simplePieChart: any;  // Configuration du graphique
   showCard : boolean = false;
 
-  startDate: string = '2023-01-01';
-  endDate: string = '2023-12-31';
+  startDate: string = '20230101';
+  endDate: string = '20231231';
 
   // Current Date
   // currentDate: Date = new Date();
@@ -89,10 +89,10 @@ export class DashboardComponent implements OnInit {
         localStorage.removeItem('toast');
       }
 
-      this.authService.getCurrentUser().subscribe({
+      /* this.authService.getCurrentUser().subscribe({
         next: (res) => console.log('✅ Utilisateur connecté :', res),
         error: (err) => console.error('❌ Erreur backend :', err)
-      });
+      }); */
 
        this.authService.isLoggedIn().then(isLogged => {
         if (isLogged) {
@@ -107,7 +107,7 @@ export class DashboardComponent implements OnInit {
           this.username = 'Utilisateur';
 
         }
-      }); 
+      });  
   
 
       // Récupération synchrone du username Keycloak
@@ -201,6 +201,8 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
+  
 
   /* fetchStatsEnergie(): void {
     this.http.get<number>('http://192.168.10.181:9080/api/v1/FaitSuiviEnergie/QuantiteKwhProduit?start=2020-01-01&end=2020-03-30')

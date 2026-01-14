@@ -1,95 +1,114 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-// search module
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DecimalPipe } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
+import { AccountModule } from './account/account.module';
 import { AppComponent } from './app.component';
-
-import { LayoutsModule} from "./layouts/layouts.module";
+import { LayoutsModule } from "./layouts/layouts.module";
 import { PagesModule } from "./pages/pages.module";
 
-// Auth
-import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS  } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { environment } from '../environments/environment';
-import { initFirebaseBackend } from './authUtils';
-import { FakeBackendInterceptor } from './core/helpers/fake-backend';
-import { ErrorInterceptor } from './core/helpers/error.interceptor';
-// import { JwtInterceptor } from './core/helpers/jwt.interceptor';
-import { JwtInterceptor } from './core/helpers/jwt-keycloak.interceptor';
+// 🔹 Modules utilitaires
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
-
-// Language
+// 🔹 Traduction
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { DecimalPipe } from '@angular/common';
+
+// 🔹 Intercepteurs
+import { FakeBackendInterceptor } from './core/helpers/fake-backend';
+import { ErrorInterceptor } from './core/helpers/error.interceptor';
+//import { JwtInterceptor } from './core/helpers/jwt.interceptor'; // ✅ décommenté
+import { JwtInterceptor } from './core/helpers/jwt-keycloak.interceptor';
+
+// 🔹 Keycloak
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { KeycloakBearerInterceptor } from 'keycloak-angular';
 
 
+// 🔹 Environnements
+import { environment } from '../environments/environment';
+// Loader pour ngx-translate
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
 
-/* if (environment.defaultauth === 'firebase') {
-  initFirebaseBackend(environment.firebaseConfig);
-} else {
-  FakeBackendInterceptor;
-} */
+const isKeycloakOn = environment.useKeycloak;
 
-  export function kcFactory(keycloak: KeycloakService) {
-    return () =>
-      keycloak.init({
-        config: {
-          realm: environment.keycloakConfig.realm,
-          clientId: environment.keycloakConfig.clientId,
-          url: environment.keycloakConfig.url
-        },
-        initOptions: {
-          onLoad: 'login-required',
-          checkLoginIframe: false,
-          redirectUri: window.location.origin
-        },
-        loadUserProfileAtStartUp: true
-      }).then(() => console.log('✅ Keycloak initialized'))
-        .catch(err => console.error('❌ Keycloak init error:', err));
-  }
+/* ➜  Factory Keycloak (inactive si useKeycloak = false) */
+export function kcFactory(keycloak: KeycloakService) {
+  return async () => {
+    if (!isKeycloakOn) return;               // désactivé
+    await keycloak.init({
+      config: environment.keycloakConfig,
+      initOptions: {
+        onLoad: 'login-required',
+        checkLoginIframe: false,
+        pkceMethod: 'S256',
+        silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
+        redirectUri: window.location.origin
+      },
+      loadUserProfileAtStartUp: true
+    });
+  };
+}
 
 @NgModule({
   declarations: [
-    AppComponent
-    ],
+    AppComponent,
+    
+  ],
   imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    LayoutsModule,
+    PagesModule,
+    AccountModule,
+    Ng2SearchPipeModule,
+    KeycloakAngularModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {
         provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
+        useFactory: createTranslateLoader,
         deps: [HttpClient]
       }
-    }),
-    BrowserAnimationsModule,
-    HttpClientModule,
-    BrowserModule,
-    AppRoutingModule,
-    LayoutsModule,
-    PagesModule,
-    Ng2SearchPipeModule,
-    KeycloakAngularModule
-
+    })
   ],
+
   providers: [
-    {provide : APP_INITIALIZER, deps : [KeycloakService],useFactory : kcFactory, multi : true},
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    /* 1. Keycloak initializer (ne fait rien si useKeycloak = false) */
+    {
+      provide: APP_INITIALIZER,
+      useFactory: kcFactory,
+      deps: [KeycloakService],
+      multi: true
+    },
+
+    /* 2. Intercepteurs AUTH : un seul actif à la fois */
+    ...(isKeycloakOn
+      ? [{
+          provide: HTTP_INTERCEPTORS,
+          useClass: KeycloakBearerInterceptor, // fourni par keycloak-angular
+          multi: true
+        }]   // ici tu remettras le JwtInterceptor Keycloak quand tu voudras
+      : [{
+            provide: HTTP_INTERCEPTORS,
+            useClass: JwtInterceptor,
+            multi: true
+          }]),
+
+    /* 3. Autres intercepteurs toujours actifs */
+    //{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     //{ provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
+
     DecimalPipe
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-function then(arg0: () => void) {
-  throw new Error('Function not implemented.');
-}
-

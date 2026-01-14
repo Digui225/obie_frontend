@@ -53,7 +53,13 @@ export const MENU: MenuItem[] = [
           className: 'suivi-item' // Ajoute cette ligne
 
         
-        }
+        },
+      {
+    id: 4,
+    label: "Creation de graphes",
+    link: 'creation',
+    icon: 'bx bx-scatter-chart',
+  },
   
 ]
   

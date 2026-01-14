@@ -1,7 +1,7 @@
     <div class="col-xl-12">
       <div class="card">
         <div class="card-header align-results-center d-flex">
-            <h4 class="card-title mb-0 flex-grow-1">STATISTIQUES GENERALES DES ABONNES PAR DIRECTION</h4>
+            <h4 class="card-title mb-0 flex-grow-1">STATISTIQUES GENERALES PAR DIRECTION</h4>
             <div class="flex-shrink-0 ms-auto">
               <div class="d-flex flex-wrap gap-2 align-items-center ms-auto">
                 <input type="date" class="form-control form-control-sm" [(ngModel)]="startDate" style="width: 140px;">
@@ -16,11 +16,11 @@
                   <span class="text-muted"><i class="ri-file-list-3-line align-bottom"></i> Telecharger</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
-                  <button type="button" class="btn btn-success btn-sm" (click)="exportToExcel()">
+                  <button type="button" class="btn btn-success btn-sm" (click)="exportToExcelStats()">
                     <i class="ri-file-excel-line align-bottom"></i> Telecharger en Excel
                   </button>
                   <br><br>
-                  <button type="button" class="btn btn-danger btn-sm" (click)="exportToPDF()">
+                  <button type="button" class="btn btn-danger btn-sm" (click)="exportToPDFStats()">
                     <i class="ri-file-pdf-line align-bottom"></i> Telecharger en PDF
                   </button>
                 </div>
@@ -40,12 +40,11 @@
               <thead class="table-light">
                 <tr>
                   <th class="center-text">N°</th>
-                  <th class="center-text">Direction</th>
-                  <th class="center-text">Total Abonnés</th>
-                  <th class="center-text">Abonnés Actifs</th>
-                  <th class="center-text">Abonnés Résiliés</th>
-                  <th class="center-text">Abonnés Facturés</th>
-                  <th class="center-text">Abonnés Forfait</th>
+                  <th scope="col">Direction</th>
+                  <th scope="col">Nombre d'abonnés</th>
+                  <th scope="col">Revenus Generés</th>
+                  <th scope="col">Consommation </th>
+                  <th scope="col">Sollicitations </th>
                 </tr>
               </thead>
               <tbody>
@@ -56,8 +55,7 @@
                     <td class="center-text">{{ abonne[2] }}</td>
                     <td class="center-text">{{ abonne[3] }}</td>
                     <td class="center-text">{{ abonne[4] }}</td>
-                    <td class="center-text">{{ abonne[5] }}</td>       
-                  </tr>
+                   </tr>
               </tbody>
             </table>
   

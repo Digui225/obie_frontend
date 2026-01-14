@@ -63,7 +63,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let detail of detailConsoList | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }; let i = index">
+                <tr *ngFor="let detail of detailConsoList | paginate: { id: 'basicBarPagination',itemsPerPage: itemsPerPage, currentPage: currentPage }; let i = index">
                   <td scope="col">{{ i + 1 }}</td>
                   <td>{{ detail[1] }}</td>
                   <td>{{ detail[2] }}</td>
@@ -82,6 +82,7 @@
 
              <!-- 🔹 Pagination -->
             <pagination-controls
+            id="basicBarPagination"
             (pageChange)="onPageChange($event)"
             previousLabel="←"
             nextLabel="→"

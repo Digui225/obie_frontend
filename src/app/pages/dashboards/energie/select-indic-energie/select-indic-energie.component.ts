@@ -273,7 +273,7 @@ export class SelectIndicEnergieComponent {
     const normalizedIndicateur = normalize(indicateur);
     const normalizedAxe = normalize(axe);
 
-    this.faitSuiviEnergieService.getEnergieData(normalizedIndicateur, normalizedAxe, startDate, endDate)
+    this.faitSuiviEnergieService.getEnergieData(normalizedIndicateur, normalizedAxe, startDate.toString(), endDate.toString())
       .subscribe({
         next: (data: [string, number][]) => {
           console.log(`Résultats obtenus pour ${axe}:`, data);

@@ -93,12 +93,15 @@ export class FaitSuiviAbonneComponent {
       }
     
       // 2️⃣ Dates
-      const startDate = this.dateRangeService.getStartDate();
-      const endDate = this.dateRangeService.getEndDate();
-      if (!startDate || !endDate) {
+      const rawStartDate = this.dateRangeService.getStartDate();
+      const rawEndDate = this.dateRangeService.getEndDate();
+      if (!rawStartDate || !rawEndDate) {
         alert('Veuillez sélectionner une date de début et une date de fin.');
         return;
       }
+      const startDate = rawStartDate.toString();
+      const endDate = rawEndDate.toString();
+
     
       // 3️⃣ Type d’abonné
       const abonneTypesMapping: Record<string, string> = {
@@ -300,6 +303,14 @@ export class FaitSuiviAbonneComponent {
           console.error('Erreur lors du chargement du logo :', error);
         });
     }
+
+    onResultsReceived(event: { data: any; resultType: string; showCard: boolean }) {
+    console.log("Résultats reçus du composant enfant :", event);
+
+    this.results = event.data;
+    this.resultType = event.resultType;
+    this.showCard = event.showCard;
+  }
     
     
     

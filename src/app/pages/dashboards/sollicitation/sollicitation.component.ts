@@ -17,8 +17,9 @@ import { DataSharingService } from 'src/app/core/services/data-sharing.service';
 import { DateRangeService } from 'src/app/core/services/date-range.service';
 import { ApiTableConfigService } from 'src/app/core/services/api-table-config.service';
 import { FaitSuiviSollService } from 'src/app/core/services/fait-suivi-soll.service';
-
-  // Import pour CSV
+import { ResultsFetchedPayload } from 'src/app/core/models/results-fetched-payload';
+  
+// Import pour CSV
   import { jsPDF } from 'jspdf';  // Import de jsPDF
   import 'jspdf-autotable';  // Import du plugin autoTable pour jsPDF
   import autoTable from 'jspdf-autotable';
@@ -37,8 +38,8 @@ export class SollicitationComponent implements OnInit {
   
 
   // Propriétés explicites pour les dates
-  startDate: string | null = null;
-  endDate: string | null = null;
+  startDate: Number | null = null;
+  endDate: Number | null = null;
   loading: boolean = false; // Pour indiquer si les données sont en cours de chargement
   errorMessage: string | null = null; // Pour stocker les messages d'erreur
   showCard : boolean = false;
@@ -94,8 +95,8 @@ export class SollicitationComponent implements OnInit {
 
 
     // Initialiser des dates par défaut
-    const defaultStartDate = '2020-02-01'; // Exemple : 1er janvier 2025
-    const defaultEndDate = '2020-03-30'; // Exemple : 31 janvier 2025
+    const defaultStartDate = '20200201'; // Exemple : 1er janvier 2025
+    const defaultEndDate = '20200330'; // Exemple : 31 janvier 2025
     this.dateRangeService.setStartDate(defaultStartDate);
     this.dateRangeService.setEndDate(defaultEndDate);
 
@@ -111,7 +112,7 @@ export class SollicitationComponent implements OnInit {
     // Chart Color Data Get Function
     this._basicRadialbarChart('["--vz-success"]');
 
-      this.indicateurs = this.Groups.filter(item => item.type === 'Indicateurs');
+      /* this.indicateurs = this.Groups.filter(item => item.type === 'Indicateurs');
       this.axes = this.Groups.filter(item => item.type === 'Axes d analyse');
 
       /// Filtrage des groupes
@@ -126,7 +127,7 @@ export class SollicitationComponent implements OnInit {
       this.showAxes = this.selectedIndicateurs.length > 0;
 
       // Sélection automatique d’un axe
-      this.selectedAxes = this.filteredAxes.length > 0 ? [this.filteredAxes[0].name] : [];
+      this.selectedAxes = this.filteredAxes.length > 0 ? [this.filteredAxes[0].name] : []; */
       this.dataSharingService.setSelectedAxes(this.selectedAxes);
 
       // Ouvrir axesSelect automatiquement
@@ -207,127 +208,91 @@ export class SollicitationComponent implements OnInit {
 
   
 
-  /**
-     * Sale Location Map
-     */
-  options = {
-    layers: [
-      tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw", {
-        id: "mapbox/light-v9",
-        tileSize: 512,
-        zoomOffset: -1,
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      })
-    ],
-    zoom: 1.1,
-    center: latLng(28, 1.5)
-  };
-  layers = [
-    circle([41.9, 12.45], { color: "#435fe3", opacity: 0.5, weight: 10, fillColor: "#435fe3", fillOpacity: 1, radius: 400000, }),
-    circle([12.05, -61.75], { color: "#435fe3", opacity: 0.5, weight: 10, fillColor: "#435fe3", fillOpacity: 1, radius: 400000, }),
-    circle([1.3, 103.8], { color: "#435fe3", opacity: 0.5, weight: 10, fillColor: "#435fe3", fillOpacity: 1, radius: 400000, }),
-  ];
-
-  // open candidate detail
-  opendetail(id: any) {
-    this.candidatedetail = this.candidatelist[id]
-  }
-
-  // Follow - unfollow
-  followClick(ev: any) {
-    if (this.followbtn == '1') {
-      this.followbtn = '2'
-      this.followtxt = 'Unfollow'
-    } else {
-      this.followbtn = '1'
-      this.followtxt = 'Follow'
-    }
-  }
- 
-  /**
-   * Option groups Select2
-   */
-   selectedGroup = 'Choisissez les indicateurs et axes d analyses à afficher';
-   Groups = [ 
-    { name: 'Nombre de sollicitations clients', type: 'Indicateurs' },
-    { name: 'Taux de sollicitation résolues dans les délais',  type: 'Indicateurs' },
-    { name: 'Taux de sollicitation résolues hors délais',  type: 'Indicateurs' },
-    { name: 'Durée moyenne de résolution des sollicitations',  type: 'Indicateurs' },
-    { name: 'Type abonné', type: 'Axes d analyse' },
-    { name: 'Segment abonné', type: 'Axes d analyse' },
-    { name: 'Puissance Souscrite', type: 'Axes d analyse' },
-    { name: 'Produit', type: 'Axes d analyse' },
-    { name: 'Direction', type: 'Axes d analyse' },
-   ];
-
-      // Déclare filteredAxes et filteredIndicateurs avec un type explicite
-   filteredAxes: Group[] = [];
-   filteredIndicateurs: Group[] = [];
-   
-   // Variable pour afficher uniquement les indicateurs au départ
-   filteredGroups: Group[] = this.Groups.filter(group => group.type === 'Indicateurs');
-   
-   // Variable pour savoir si les axes doivent être affichés
-   showAxes = false;
-
-     // Gérer la sélection des éléments (indicateurs et axes)
-       onSelect(groups: Group[]): void {
-         // Mettre à jour les indicateurs sélectionnés
-         this.selectedIndicateurs = groups.filter(group => group.type === 'Indicateurs').map(group => group.name);
-
-         // Afficher les axes si des indicateurs sont sélectionnés
-         this.showAxes = this.selectedIndicateurs.length > 0;
-
-         if (this.showAxes) {
-           // Filtrer les axes
-           this.filteredAxes = this.Groups.filter(group => group.type === 'Axes d analyse');
-
-           // Définir un axe par défaut
-           if (this.selectedAxes.length === 0 && this.filteredAxes.length > 0) {
-             this.selectedAxes = [this.filteredAxes[4].name];
-           }
-           // Ouvrir automatiquement la liste déroulante des axes
-             setTimeout(() => {
-               this.axesSelect.open();
-             }, 0);
-         } else {
-           // Réinitialiser si aucun indicateur n'est sélectionné
-           this.filteredAxes = [];
-           this.selectedAxes = [];
-         }
-       }
-
-     // Gérer la sélection des axes
-     onSelectAxes(groups: Group[]): void {
-       this.selectedAxes = groups.map(group => group.name);
-     }
-
-     // Méthode pour filtrer les groupes selon le type (Indicateurs ou Axes)
-     filterGroupsByType(type: string): Group[] {
-       return this.Groups.filter(group => group.type === type);
-     }
-
-     onStartDateChange(event: Event): void {
-       const input = event.target as HTMLInputElement; // Casting explicite
-       const date = input.value;
-       this.dateRangeService.setStartDate(date);
-       console.log('Date de début mise à jour :', date);
-     }
-     
-     onEndDateChange(event: Event): void {
-       const input = event.target as HTMLInputElement; // Casting explicite
-       const date = input.value;
-       this.dateRangeService.setEndDate(date);
-       console.log('Date de fin mise à jour :', date);
-     }
-
-       // Fonction pour formater les dates
-       private formatDate(date: Date): string {
-         return date.toISOString().split('T')[0]; // Format YYYY-MM-DD
-       }
+  
        
 
-       startVoiceRecognition(inputType: string) {
+       
+
+
+
+    
+
+   onResultsReceived(event: ResultsFetchedPayload) {
+  console.log("Résultats reçus du composant enfant :", event);
+  this.results = event.data;
+  this.resultType = event.resultType;
+  this.showCard = event.showCard;
+}
+
+  exportToPDF() {
+    const doc = new jsPDF();
+  
+    // Ajouter un titre ou des informations générales
+    doc.text('Rapport Détail', 10, 10);
+  
+    // Récupérer les en-têtes selon le type de résultat
+    const headers = this['apiTableConfigService'].getTableHeaders(this.resultType);
+    this.tableHeaders = headers;
+    
+    // Vérifier si des résultats existent
+    if (this.results && this.results.length > 0) {
+      autoTable(doc, {
+        head: [headers], // Utiliser les en-têtes dynamiques
+        body: this.results.map((item, index) => {
+          const row: any[] = [index + 1]; // Ajouter le numéro de ligne
+          headers.slice(1).forEach((_, colIndex) => {
+            row.push(item[colIndex]); // Ajouter les valeurs des colonnes correspondantes
+          });
+          return row;
+        }),
+      });
+    }
+  
+    // Sauvegarder le PDF
+    doc.save('rapport_detail.pdf');
+  }
+  
+  
+
+// Méthode pour exporter en Excel
+    exportToExcel(): void {
+      if (!this.results || this.results.length === 0) {
+        console.error('Aucune donnée à exporter.');
+        return;
+      }
+
+      // Récupérer les en-têtes dynamiques
+      const headers = this['apiTableConfigService'].getTableHeaders(this.resultType);
+      this.tableHeaders = headers;
+
+      // Construire les données du tableau avec des clés correspondant aux en-têtes
+      const dataForExcel = this.results.map((result, index) => {
+        const row: any = { 'N°': index + 1 }; // Ajouter une colonne pour les numéros
+        headers.slice(1).forEach((header, colIndex) => {
+          row[header] = result[colIndex]; // Associer les valeurs des colonnes aux en-têtes
+        });
+        return row;
+      });
+
+      // Créer une feuille Excel à partir des données
+      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataForExcel);
+
+      // Créer un classeur Excel et ajouter la feuille
+      const workbook: XLSX.WorkBook = { Sheets: { 'Données': worksheet }, SheetNames: ['Données'] };
+
+      // Générer le fichier Excel en tant que buffer
+      const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+      // Créer un blob à partir du buffer pour le téléchargement
+      const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+      // Télécharger le fichier
+      saveAs(data, 'tableau.xlsx');
+    }
+  
+}
+
+/* startVoiceRecognition(inputType: string) {
         const recognition = new (window as any).webkitSpeechRecognition() || new (window as any).SpeechRecognition();
         recognition.lang = 'fr-FR';
         recognition.start();
@@ -401,11 +366,9 @@ export class SollicitationComponent implements OnInit {
         }
       
         return words;
-      }
+      } */
 
-
-
-    /*// option seclect fin
+/*// option seclect fin
   fetchData(): void {
     
     // Récupération des dates via le service DateRangeService
@@ -475,78 +438,3 @@ export class SollicitationComponent implements OnInit {
       console.error('Aucun indicateur ou axe valide sélectionné.');
     } 
   }*/
-
-  onResultsReceived(event: { data: any; resultType: string; showCard: boolean }) {
-         console.log("Résultats reçus du composant enfant :", event);
-         this.results = event.data;
-         this.resultType = event.resultType;
-         this.showCard = event.showCard;
-          }
-
-  exportToPDF() {
-    const doc = new jsPDF();
-  
-    // Ajouter un titre ou des informations générales
-    doc.text('Rapport Détail', 10, 10);
-  
-    // Récupérer les en-têtes selon le type de résultat
-    const headers = this['apiTableConfigService'].getTableHeaders(this.resultType);
-    this.tableHeaders = headers;
-    
-    // Vérifier si des résultats existent
-    if (this.results && this.results.length > 0) {
-      autoTable(doc, {
-        head: [headers], // Utiliser les en-têtes dynamiques
-        body: this.results.map((item, index) => {
-          const row: any[] = [index + 1]; // Ajouter le numéro de ligne
-          headers.slice(1).forEach((_, colIndex) => {
-            row.push(item[colIndex]); // Ajouter les valeurs des colonnes correspondantes
-          });
-          return row;
-        }),
-      });
-    }
-  
-    // Sauvegarder le PDF
-    doc.save('rapport_detail.pdf');
-  }
-  
-  
-
-// Méthode pour exporter en Excel
-    exportToExcel(): void {
-      if (!this.results || this.results.length === 0) {
-        console.error('Aucune donnée à exporter.');
-        return;
-      }
-
-      // Récupérer les en-têtes dynamiques
-      const headers = this['apiTableConfigService'].getTableHeaders(this.resultType);
-      this.tableHeaders = headers;
-
-      // Construire les données du tableau avec des clés correspondant aux en-têtes
-      const dataForExcel = this.results.map((result, index) => {
-        const row: any = { 'N°': index + 1 }; // Ajouter une colonne pour les numéros
-        headers.slice(1).forEach((header, colIndex) => {
-          row[header] = result[colIndex]; // Associer les valeurs des colonnes aux en-têtes
-        });
-        return row;
-      });
-
-      // Créer une feuille Excel à partir des données
-      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataForExcel);
-
-      // Créer un classeur Excel et ajouter la feuille
-      const workbook: XLSX.WorkBook = { Sheets: { 'Données': worksheet }, SheetNames: ['Données'] };
-
-      // Générer le fichier Excel en tant que buffer
-      const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-
-      // Créer un blob à partir du buffer pour le téléchargement
-      const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-
-      // Télécharger le fichier
-      saveAs(data, 'tableau.xlsx');
-    }
-  
-}

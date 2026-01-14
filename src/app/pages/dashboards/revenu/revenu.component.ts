@@ -8,14 +8,13 @@ import { DecimalPipe } from '@angular/common';
 import { recomendedjob, candidate } from '../abonne/data';
 import { AbonneModel, candidateModel, Group } from '../abonne/abonne.model';
 import { AbonneService } from '../abonne/abonne.service';
-import { NgbdJobSortableHeader } from '../abonne/abonne-sortable.directive';
-import { circle, latLng, tileLayer } from 'leaflet';
-import { UntypedFormBuilder } from '@angular/forms';
+
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { DataSharingService } from 'src/app/core/services/data-sharing.service';
 import { DateRangeService } from 'src/app/core/services/date-range.service';
 import { FaitSuiviRevenuService } from 'src/app/core/services/fait-suivi-revenu.service';
 import { ApiTableConfigService } from 'src/app/core/services/api-table-config.service';
+import { ResultsFetchedPayload } from 'src/app/core/models/results-fetched-payload';
 
  // Import pour CSV
  import { jsPDF } from 'jspdf';  // Import de jsPDF
@@ -458,12 +457,12 @@ export class RevenuComponent implements OnInit {
         }     
       } */
 
-      onResultsReceived(event: { data: any; resultType: string; showCard: boolean }) {
-         console.log("Résultats reçus du composant enfant :", event);
-         this.results = event.data;
-         this.resultType = event.resultType;
-         this.showCard = event.showCard;
-          }
+      onResultsReceived(event: ResultsFetchedPayload) {
+  console.log("Résultats reçus du composant enfant :", event);
+  this.results = event.data;
+  this.resultType = event.resultType;
+  this.showCard = event.showCard;
+}
 
   exportToPDF() {
     const doc = new jsPDF();

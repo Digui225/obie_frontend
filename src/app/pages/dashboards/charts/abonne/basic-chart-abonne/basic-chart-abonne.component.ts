@@ -18,8 +18,8 @@ export class BasicChartAbonneComponent {
   basicChart: any;
 
   // ✅ Champs liés à l'input date
-  startDate: string = '2020-01-01';
-  endDate: string = '2020-12-30';
+  startDate: string = '20200101';
+  endDate: string = '20201230';
 
   constructor(private faitSuiviAbonneService: FaitSuiviAbonneService) { }
 
@@ -30,8 +30,8 @@ export class BasicChartAbonneComponent {
       { label: 'Column Charts', active: true }
     ];
 
-    const startDate = '2020-01-01';
-    const endDate = '2020-12-31';
+    const startDate = '20200101';
+    const endDate = '20201231';
   
     this.loadChartData()
 

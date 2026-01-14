@@ -18,8 +18,8 @@ export class BasicChartRevenuComponent {
   basicChart: any;
 
   // ✅ Champs liés à l'input date
-  startDate: string = '2020-01-01';
-  endDate: string = '2020-12-30';
+  startDate: string | number = '2023-01-01';
+  endDate: string | number = '2023-12-30';
 
   constructor(private faitSuiviRevenuService: FaitSuiviRevenuService) { }
 
@@ -45,7 +45,7 @@ export class BasicChartRevenuComponent {
       return;
     }
   
-    this.faitSuiviRevenuService.getMontantFcatureInfos(this.startDate, this.endDate).subscribe({
+    this.faitSuiviRevenuService.getMontantFcatureInfos(this.startDate.toString(), this.endDate.toString()).subscribe({
       next: (data) => {
         this.processTypeChartData(data);
       },

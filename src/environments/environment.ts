@@ -21,13 +21,16 @@
 
 export const environment = {
   production: false,
-  apiUrl: '/api',  // redirigé par proxy.conf.json vers ton backend
+  apiUrl: '/api',
+  useKeycloak: true,          // ➜  passe à true quand tu veux Keycloak même en dev
   keycloakConfig: {
     realm: 'OsisBi',
     clientId: 'obie-angular',
-    url: 'http://192.168.10.81:8080'
+    url: 'http://192.168.10.81:8080' // ✅ espace supprimé
   }
 };
+console.log('👉 ENV DEVELOPPEMENT chargé :', environment);
+
 
 
 /*

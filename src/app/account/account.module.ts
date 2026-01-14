@@ -29,6 +29,7 @@ import { AuthComponent } from './auth/auth.component';
     ReactiveFormsModule,
     FormsModule,
     NgbToastModule,
+    ReactiveFormsModule,
     NgbModule,
     NgbNavModule,
     NgbDropdownModule,

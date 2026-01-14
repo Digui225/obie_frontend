@@ -30,7 +30,7 @@ const SollbaseUrl = 'api/v1/FaitSuiviSollicitation';
                 const params = new HttpParams()
                 .set('start', start)
                 .set('end', end);
-                return this.http.get<number>(`${EnerbaseUrl}/QuantiteKwhProduit`, { params });
+                return this.http.get<number>(`${EnerbaseUrl}/TotalConsoMensuelle`, { params });
             }
 
              // Méthode pour récupérer le revenu total
@@ -55,7 +55,7 @@ const SollbaseUrl = 'api/v1/FaitSuiviSollicitation';
                   .set('start', start)
                   .set('end', end);
             
-                return this.http.get<any[]>(`${AbsbaseUrl}/TableauAbonneDir`, { params });
+                return this.http.get<any[]>(`${SollbaseUrl}/RecapitulatifDirection`, { params });
               } 
 
   }

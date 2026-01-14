@@ -11,6 +11,7 @@ const baseUrl = '/api/v1/FaitSuiviAbonne';
 export class FaitSuiviAbonneService {
 
   constructor(private http: HttpClient) { }
+  
 
   getAbonneData(
     type: string,
@@ -51,8 +52,51 @@ export class FaitSuiviAbonneService {
     return selectedRoute();
   }
   
+  /* getAbonneDatav2(
+  type: string,
+  axe: string,
+  startDate: string,
+  endDate: string
+): Observable<[string, number][]> {
+  const mapAxeToDimension: Record<string, string> = {
+    'Direction': 'direction',
+    'Type abonné': 'type',
+    'Mode de facturation': 'mode',
+    'Segment abonné': 'segment',
+    'Puissance souscrite': 'ps',
+    'Produit': 'produit',
+  };
 
-   /* getAbonneData(
+  const mapTypeToStatut: Record<string, string> = {
+    'Abonnés actifs': 'actif',
+    'Abonnés au forfait': 'forfait',
+    'Abonnés facturés': 'facture',
+    'Abonnés résiliés': 'resilie',
+    'Nombre de résiliations': 'resiliation',
+    'Nombre total d\'abonnés': 'total',
+  };
+
+  const dimension = mapAxeToDimension[axe];
+  const statut = mapTypeToStatut[type];
+
+  if (!dimension || !statut) {
+    return throwError(() => new Error(`Type ou axe non supporté : ${type}, ${axe}`));
+  }
+
+  const params = new HttpParams()
+    .set('statut', statut)
+    .set('dimension', dimension)
+    .set('start', startDate)
+    .set('end', endDate);
+
+  return this.http.get<[string, number][]>(
+    `${baseUrl}/abonnes`,
+    { params }
+  );
+}
+*/
+
+   /* getAbonneDatav0(
     type: string,
     axe: string,
     startDate: string,

@@ -8,6 +8,7 @@ import { environment } from '../../../environments/environment';
 import { AuthenticationService } from '../../core/services/auth.service';
 import { AuthfakeauthenticationService } from '../../core/services/authfake.service';
 import { TokenStorageService } from '../../core/services/token-storage.service';
+import { KeycloakService } from 'keycloak-angular';
 import { Router } from '@angular/router';
 
 // Language
@@ -15,6 +16,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { LanguageService } from '../../core/services/language.service';
 import { TranslateService } from '@ngx-translate/core';
 
+import { LogoutSignal } from '../../core/services/logoutSignal.service';
 import { CartModel } from './topbar.model';
 import { cartData } from './data';
 
@@ -44,6 +46,8 @@ export class TopbarComponent implements OnInit {
   constructor(@Inject(DOCUMENT) private document: any, private eventService: EventService, public languageService: LanguageService,
     public _cookiesService: CookieService, public translate: TranslateService, private authService: AuthenticationService, 
     private authFackservice: AuthfakeauthenticationService, private router: Router,
+    private keycloakService: KeycloakService,
+      private logoutSignal: LogoutSignal,   // ← injecte
      private TokenStorageService: TokenStorageService, private themeService: ThemeService
   ) { }
 
@@ -69,7 +73,7 @@ export class TopbarComponent implements OnInit {
       this.total += item_price
     });
 
-    this.authService.getCurrentUser().subscribe({
+    /* this.authService.getCurrentUser().subscribe({
       next: (res) => console.log('✅ Utilisateur connecté :', res),
       error: (err) => console.error('❌ Erreur backend :', err)
     });
@@ -87,7 +91,7 @@ export class TopbarComponent implements OnInit {
         this.username = 'Utilisateur';
 
       }
-    });
+    }); */
   }
 
   /**
@@ -160,6 +164,23 @@ export class TopbarComponent implements OnInit {
     }
   } 
 
+  /**
+ * Déconnexion propre : sans Keycloak (local) ou avec Keycloak
+ *  – signale la déconnexion
+ *  – redirection vers /login sans passer par landing
+ */
+  async logout(): Promise<void> {
+    this.logoutSignal.setLoggedOut();          // ① toujours signaler la sortie
+
+    if (environment.useKeycloak) {             // ② mode Keycloak
+      await this.keycloakService.logout(window.location.origin); // Keycloak nettoie + redirect
+      /* pas besoin de router.navigate, Keycloak redirige déjà */
+    } else {                                   // ③ mode local
+      this.authFackservice.logout();           // nettoie localStorage
+      this.router.navigate(['/login'], { replaceUrl: true });
+    }
+  }
+
   /***
    * Language Listing
    */
@@ -187,13 +208,7 @@ export class TopbarComponent implements OnInit {
   oncheckboxchange(evnt: any) {
   }
 
-  /**
-   * Logout the user
-   */
-  logout() {
-    this.authService.logout();  // Appel à la méthode logout du service AuthenticationService pour déconnecter l'utilisateur
-    // this.router.navigate(['/auth/login']);  // Redirige l'utilisateur vers la page de login après la déconnexion
-  }
+  
 
   windowScroll() {
     if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {

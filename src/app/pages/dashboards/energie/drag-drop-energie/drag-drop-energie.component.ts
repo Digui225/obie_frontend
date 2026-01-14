@@ -114,7 +114,7 @@ export class DragDropEnergieComponent {
 
     console.log(`🚀 FetchData pour [${indicateur}] par [${axe}] entre ${startDate} et ${endDate}`);
 
-    this.faitSuiviEnergieService.getEnergieData(indicateur, axe, startDate, endDate)
+    this.faitSuiviEnergieService.getEnergieData(indicateur, axe, startDate.toString(), endDate.toString())
       .subscribe({
         next: (data: [string, number][]) => {
           console.log(`✅ Résultats obtenus (${data.length} lignes) pour ${axe}:`, data);

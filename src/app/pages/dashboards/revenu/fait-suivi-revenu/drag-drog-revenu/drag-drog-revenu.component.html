@@ -1,1 +1,78 @@
-<p>drag-drog-revenu works!</p>
+
+<!-- 🔔 Message d'erreur si nécessaire -->
+<div *ngIf="errorMessage" class="alert alert-warning text-center fw-bold shadow-sm mb-4" role="alert">
+  <i class="bi bi-exclamation-triangle-fill me-2"></i>
+  {{ errorMessage }}
+</div>
+
+<div class="row g-4">
+  <!-- Indicateurs -->
+  <div class="col-lg-6 col-md-12">
+    <div class="card card-height-100 shadow-sm">
+      <div class="card-header bg-light">
+        <h5 class="card-title mb-0 fw-bold text-primary">
+          Indicateurs
+        </h5>
+      </div>
+      <div class="card-body">
+        <div
+          cdkDropList
+          [cdkDropListData]="indicateurs"
+          (cdkDropListDropped)="onDrop($event, 'indicateur')"
+          class="drop-zone"
+        >
+          <p class="text-muted small mb-2">Glissez un indicateur ici :</p>
+          <div
+            class="drag-item"
+            *ngFor="let indic of indicateurs"
+            cdkDrag
+            [cdkDragData]="indic"
+          >
+            {{ indic.name }}
+          </div>
+        </div>
+
+        <!-- Sélection en cours -->
+        <div *ngIf="draggedIndicateur" class="alert alert-info mt-3 p-2 d-flex align-items-center">
+          <i class="bi bi-check-circle-fill text-success me-2"></i>
+          <span>Indicateur sélectionné : <b>{{ draggedIndicateur }}</b></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Axes -->
+  <div class="col-lg-6 col-md-12">
+    <div class="card card-height-100 shadow-sm">
+      <div class="card-header bg-light">
+        <h5 class="card-title mb-0 fw-bold text-success">
+          Axes d’analyse
+        </h5>
+      </div>
+      <div class="card-body">
+        <div
+          cdkDropList
+          [cdkDropListData]="axes"
+          (cdkDropListDropped)="onDrop($event, 'axe')"
+          class="drop-zone"
+        >
+          <p class="text-muted small mb-2">Glissez un axe ici :</p>
+          <div
+            class="drag-item"
+            *ngFor="let axe of axes"
+            cdkDrag
+            [cdkDragData]="axe"
+          >
+            {{ axe.name }}
+          </div>
+        </div>
+
+        <!-- Sélection en cours -->
+        <div *ngIf="draggedAxe" class="alert alert-info mt-3 p-2 d-flex align-items-center">
+          <i class="bi bi-check-circle-fill text-success me-2"></i>
+          <span>Axe sélectionné : <b>{{ draggedAxe }}</b></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+<div class="row">
+  <!-- Graphique -->
+  <div class="col-xl-6">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <h4 class="card-title mb-0">ÉVOLUTION MENSUELLE DE LA CONSOMMATION D'ÉNERGIE</h4>
+        <div class="flex-shrink-0 ms-auto">
+          <div class="dropdown card-header-dropdown" ngbDropdown>
+            <a class="text-reset dropdown-btn arrow-none" href="javascript:void(0);" ngbDropdownToggle>
+              <span class="text-muted"><i class="ri-file-list-3-line align-bottom"></i> Télécharger</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+              <button type="button" class="btn btn-success btn-sm" (click)="exportToExcel()">
+                <i class="ri-file-excel-line align-bottom"></i> Excel
+              </button>
+              <button type="button" class="btn btn-danger btn-sm" (click)="exportToPDF()">
+                <i class="ri-file-pdf-line align-bottom"></i> PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div echarts [options]="chartOpts" (chartClick)="onBarClick($event)" class="demo-chart" style="height: 400px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Détail du mois -->
+  <div class="col-xl-6" *ngIf="selectedMonth && detailConsoList.length">
+    <div class="card mt-4" style="max-height: 400px; overflow-y: auto;">
+      <div class="card-header d-flex justify-content-between">
+        <h4 class="card-title mb-0">Détails : {{ selectedMonth }}</h4>
+        <div class="flex-shrink-0 ms-auto">
+          <div class="dropdown card-header-dropdown" ngbDropdown>
+            <a class="text-reset dropdown-btn arrow-none" href="javascript:void(0);" ngbDropdownToggle>
+              <span class="text-muted"><i class="ri-file-list-3-line align-bottom"></i> Télécharger</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+              <button type="button" class="btn btn-success btn-sm" (click)="exportToExcelMonth()">
+                <i class="ri-file-excel-line align-bottom"></i> Excel
+              </button>
+              <button type="button" class="btn btn-danger btn-sm" (click)="exportToPDFMonth()">
+                <i class="ri-file-pdf-line align-bottom"></i> PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="table table-nowrap table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>N°</th>
+              <th>Direction</th>
+              <th>Consommation (kWh)</th>
+              <th>% du mois</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let d of detailConsoList | paginate:{id:'pg',itemsPerPage:itemsPerPage,currentPage:currentPage}; let i=index">
+              <td>{{ i+1 }}</td>
+              <td>{{ d[1] }}</td>
+              <td>{{ d[2] }}</td>
+              <td>{{ calcPercent(d[2],selectedMonth) }}</td>
+            </tr>
+          </tbody>
+          <tfoot class="table-light">
+            <tr>
+              <td colspan="2"><strong>Total</strong></td>
+              <td><strong>{{ totalMonth(selectedMonth) }}</strong></td>
+              <td><strong>100 %</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+        <pagination-controls id="pg"
+          (pageChange)="currentPage=$event"
+          previousLabel="←" nextLabel="→"
+          [maxSize]="5" [responsive]="true"
+          [autoHide]="false">
+        </pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

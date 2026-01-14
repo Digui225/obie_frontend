@@ -8,8 +8,9 @@ import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
-import { DataSharingService } from 'src/app/core/services/data-sharing.service';
 import autoTable from 'jspdf-autotable';
+
+import { DataSharingService } from 'src/app/core/services/data-sharing.service';
 import { ApiTableConfigService } from 'src/app/core/services/api-table-config.service';
 
 

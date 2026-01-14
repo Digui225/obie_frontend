@@ -4,6 +4,7 @@ import { MatTableModule } from '@angular/material/table';  // Import du MatTable
 import { MatPaginatorModule } from '@angular/material/paginator';
 
 
+
 import { CommonModule } from '@angular/common';
 import {
   NgbToastModule
@@ -126,6 +127,7 @@ import { DragDropSollComponent } from './sollicitation/drag-drop-soll/drag-drop-
 import { ResultModalSollComponent } from './sollicitation/result-modal-soll/result-modal-soll.component';
 import { ResultModalRevenuComponent } from './revenu/fait-suivi-revenu/result-modal-revenu/result-modal-revenu.component';
 import { PiechartStackSollComponent } from './charts/sollicitation/piechart-stack-soll/piechart-stack-soll.component';
+import { GraphBarEnergieComponent } from './charts/energie/graph-bar-energie/graph-bar-energie.component';
 
 
 
@@ -223,6 +225,7 @@ import { PiechartStackSollComponent } from './charts/sollicitation/piechart-stac
     ResultModalSollComponent,
     ResultModalRevenuComponent,
     PiechartStackSollComponent,
+    GraphBarEnergieComponent,
    
 
   ],

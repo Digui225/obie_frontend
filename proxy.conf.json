@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://192.168.10.156:9080",
+    "target": "http://192.168.10.209:9080",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

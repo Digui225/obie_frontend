@@ -17,8 +17,8 @@ export class CombochartEnergieComponent {
   breadCrumbItems!: Array<{}>;
   comboChart: any;
   // ✅ Champs liés à l'input date
-  startDate: string = '2020-01-01';
-  endDate: string = '2020-12-30';
+  startDate: string | number = '20230101';
+  endDate: string | number = '20231230';
   
 
   constructor(private faitSuiviEnergieService: FaitSuiviEnergieService) { }
@@ -48,7 +48,7 @@ export class CombochartEnergieComponent {
       return;
     }
 
-    this.faitSuiviEnergieService.getQuantiteKwhInfos(this.startDate, this.endDate)
+    this.faitSuiviEnergieService.getQuantiteKwhInfos(this.startDate.toString(), this.endDate.toString())
       .subscribe({
         next: (data) => this.processTypeChartData(data),
         error: (err) => {

@@ -21,8 +21,8 @@ export class StatsSollComponent {
   itemsPerPage: number = 5;
 
    // ✅ Champs liés à l'input date
-  startDate: string = '2020-01-01';
-  endDate: string = '2022-12-30';
+   startDate: string | number = '2020-01-01';
+  endDate: string | number = '2022-12-30';
 
   constructor(private faitSuiviSollService: FaitSuiviSollService) {}
 
@@ -49,7 +49,7 @@ export class StatsSollComponent {
   
     
   
-    this.faitSuiviSollService.getSollStatsParType(this.startDate, this.endDate)
+    this.faitSuiviSollService.getSollStatsParType(this.startDate.toString(), this.endDate.toString())
       .subscribe({
         next: (data) => {
           console.log('Données récupérées :', data);

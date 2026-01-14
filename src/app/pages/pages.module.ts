@@ -31,6 +31,7 @@ import { ToastsContainer } from './dashboards/dashboard/toasts-container.compone
 import { DashboardsModule } from "./dashboards/dashboards.module";
 import { LandingComponent } from './landing/landing.component';
 import { Landing2Component } from './landing2/landing2.component';
+import { GraphePersoComponent } from './graphe-perso/graphe-perso.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { Landing2Component } from './landing2/landing2.component';
     ToastsContainer,
     LandingComponent,
     Landing2Component,
+    GraphePersoComponent,
     
   ],
   imports: [

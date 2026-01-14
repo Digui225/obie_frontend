@@ -20,8 +20,8 @@ export class StatsRevenuComponent {
    itemsPerPage: number = 5; 
 
    // ✅ Champs liés à l'input date
-  startDate: string = '2020-01-01';
-  endDate: string = '2022-12-30';
+  startDate: string | number = '20230101';
+  endDate: string | number = '20231230';
 
   constructor(private faitSuiviRevenuService: FaitSuiviRevenuService) {}
 
@@ -48,7 +48,7 @@ export class StatsRevenuComponent {
   
     
   
-    this.faitSuiviRevenuService.getRevenuStatsParPuissance(this.startDate, this.endDate)
+    this.faitSuiviRevenuService.getRevenuStatsParPuissance(this.startDate.toString(), this.endDate.toString())
       .subscribe({
         next: (data) => {
           console.log('Données récupérées :', data);
