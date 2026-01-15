@@ -199,12 +199,12 @@ export class FaitSuiviEnergieService {
       return this.http.get<any[]>(`${baseUrl}/EnergieMensuelle`, { params });
     }
 
-    getQuantiteKwhConsMois(start: string, end:string){
+    getQuantiteKwhConsMois(start: string, end:string): Observable<[string, string, number][]> {
       const params = new HttpParams()
         .set('start', start)
         .set('end', end);
   
-        return this.http.get<any[]>(`${baseUrl}/DetailEnergieMensuelle`, { params });
+        return this.http.get<[string, string, number][]>(`${baseUrl}/DetailEnergieMensuelle`, { params });
       }
 
 /* // Méthode pour récupérer le qte total de Kwh    

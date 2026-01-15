@@ -63,22 +63,26 @@ private loadYear(start: string, end: string): void {
   });
 }
 
-private prepareAxis(raw: any[]): void {
+private prepareAxis(raw: [string, string, number][]): void {
   const mapper: Record<string, string> = {
     January: 'Jan', February: 'Fev', March: 'Mars', April: 'Avr',
     May: 'Mai', June: 'Juin', July: 'Juil', August: 'Aout',
     September: 'Sep', October: 'Oct', November: 'Nov', December: 'Dec'
   };
 
-  const tmp = new Map<string, number>();
-  raw.forEach(([m, v]) => {
-    const [enMonth, yr] = m.split(' ');
+  // 1) agrégation par mois
+  const agg = new Map<string, number>();
+  raw.forEach(([monthYear, , kwh]) => {
+    const [enMonth, yr] = monthYear.split(' ');
     const fr = mapper[enMonth];
-    if (fr) tmp.set(`${fr} ${yr}`, v);
+    if (!fr) return;
+    const key = `${fr} ${yr}`;
+    agg.set(key, (agg.get(key) || 0) + (Number(kwh) || 0));
   });
 
+  // 2) tri chronologique
   const sorter = Object.keys(mapper);
-  const entries = [...tmp.entries()].sort((a, b) => {
+  const entries = [...agg.entries()].sort((a, b) => {
     const [ma, ya] = a[0].split(' ');
     const [mb, yb] = b[0].split(' ');
     const yDiff = +ya - +yb;
@@ -87,7 +91,12 @@ private prepareAxis(raw: any[]): void {
 
   this.shortMonths = entries.map(([k]) => k);
   this.kwhData     = entries.map(([, v]) => v);
+
+  console.log('shortMonths', this.shortMonths);
+  console.log('kwhData', this.kwhData);
 }
+
+
 
 private selectFirstMonth(): void {
   if (!this.shortMonths.length) return;
@@ -139,6 +148,11 @@ private buildChart(): void {
       }
     }]
   };
+
+  // 2) on force le refresh une fois que le DOM est stable
+  setTimeout(() => {
+    this.chartOpts = { ...this.chartOpts };   // nouvelle ref → ngx-echarts re-render
+  }, 0);
 }
 
 onBarClick(params: any): void {
